@@ -118,6 +118,10 @@ class AuthController extends Controller
         ]);
 
         $user = User::find($userId);
+        
+        // Record DPDP Act consent
+        \App\Models\Consent::record($userId, 'terms_and_privacy', $request->getIp());
+
         Auth::login($user);
 
         View::setFlash('success', 'Account created successfully! Welcome to Primodomus.');

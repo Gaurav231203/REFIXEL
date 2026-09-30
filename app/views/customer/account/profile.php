@@ -35,9 +35,14 @@
           </div>
 
           <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-            <a href="<?= \App\Core\View::url('/change-password') ?>" class="text-danger font-weight-bold small">
-              <i class="fa fa-key mr-1"></i> Change Account Password
-            </a>
+            <div>
+              <a href="<?= \App\Core\View::url('/change-password') ?>" class="text-danger font-weight-bold small mr-3">
+                <i class="fa fa-key mr-1"></i> Change Password
+              </a>
+              <a href="<?= \App\Core\View::url('/account/privacy') ?>" class="text-success font-weight-bold small">
+                <i class="fa fa-shield mr-1"></i> Privacy & Data Rights
+              </a>
+            </div>
             <button type="submit" class="btn text-white px-4 py-2 font-weight-bold" style="background:#0f6e56; border-radius: 8px;">
               Save Profile Changes
             </button>

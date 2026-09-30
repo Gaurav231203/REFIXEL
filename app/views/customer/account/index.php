@@ -32,6 +32,9 @@
           <a href="<?= \App\Core\View::url('/account/profile') ?>" class="list-group-item list-group-item-action border-0">
             <i class="fa fa-user-circle mr-2"></i> Profile & Address
           </a>
+          <a href="<?= \App\Core\View::url('/account/privacy') ?>" class="list-group-item list-group-item-action border-0">
+            <i class="fa fa-shield mr-2"></i> Privacy & Data Rights
+          </a>
           <a href="<?= \App\Core\View::url('/logout') ?>" class="list-group-item list-group-item-action border-0 text-danger">
             <i class="fa fa-sign-out mr-2"></i> Sign Out
           </a>

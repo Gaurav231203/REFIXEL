@@ -213,6 +213,9 @@ class BookingController extends Controller
             Cart::clear();
         }
 
+        // Record DPDP Act consent for booking processing
+        \App\Models\Consent::record($customerId, 'booking_terms_and_data_processing', $request->getIp());
+
         // Trigger notifications (admin alert + customer confirmation)
         try {
             $bookingRecord = [

@@ -26,6 +26,16 @@ class Response
         return $this;
     }
 
+    public function getHeader(string $name): ?string
+    {
+        return $this->headers[$name] ?? null;
+    }
+
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
     public function setContent(string $content): self
     {
         $this->content = $content;
@@ -37,9 +47,39 @@ class Response
         return $this->content;
     }
 
+    public function applySecurityHeaders(): self
+    {
+        $defaultHeaders = [
+            'X-Frame-Options'        => 'SAMEORIGIN',
+            'X-Content-Type-Options' => 'nosniff',
+            'X-XSS-Protection'       => '1; mode=block',
+            'Referrer-Policy'        => 'strict-origin-when-cross-origin',
+            'Permissions-Policy'     => 'geolocation=(), microphone=(), camera=()',
+        ];
+
+        if (!isset($this->headers['Content-Security-Policy'])) {
+            $defaultHeaders['Content-Security-Policy'] = "default-src 'self' 'unsafe-inline' https: data:; frame-ancestors 'self';";
+        }
+
+        $isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+            || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+        if ($isHttps) {
+            $defaultHeaders['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains';
+        }
+
+        foreach ($defaultHeaders as $name => $value) {
+            if (!isset($this->headers[$name])) {
+                $this->headers[$name] = $value;
+            }
+        }
+
+        return $this;
+    }
 
     public function send(): void
     {
+        $this->applySecurityHeaders();
+
         if (!headers_sent()) {
             http_response_code($this->statusCode);
             foreach ($this->headers as $name => $value) {

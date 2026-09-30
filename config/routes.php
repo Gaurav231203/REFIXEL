@@ -96,6 +96,9 @@ Router::group(['middleware' => ['RequireRole:customer']], function () {
     Router::get('/account/invoices', 'AccountController@invoices');
     Router::get('/account/invoices/{id}', 'AccountController@invoiceDetail');
     Router::get('/account/profile', 'AccountController@profile');
+    Router::get('/account/privacy', 'AccountController@privacy');
+    Router::get('/account/privacy/export', 'AccountController@exportData');
+    Router::post('/account/privacy/delete-request', 'AccountController@requestDataDeletion', ['VerifyCsrf']);
 });
 
 // ==========================================

@@ -275,4 +275,81 @@ class AccountController extends Controller
             'user'  => Auth::user(),
         ], 'customer');
     }
+
+    public function privacy(Request $request): Response
+    {
+        $userId = Auth::id();
+        $consents = \App\Models\Consent::getByUser($userId);
+
+        return $this->render('customer.account.privacy', [
+            'title'    => 'Privacy & Data Rights | Primodomus',
+            'user'     => Auth::user(),
+            'consents' => $consents,
+        ], 'customer');
+    }
+
+    public function exportData(Request $request): Response
+    {
+        $userId = Auth::id();
+        $user = User::find($userId);
+        if ($user) {
+            unset($user['password_hash']);
+        }
+
+        $profile = \App\Models\CustomerProfile::findBy('user_id', $userId);
+        $consents = \App\Models\Consent::getByUser($userId);
+        $bookings = Booking::findByCustomer($userId);
+        $invoices = Invoice::findByCustomer($userId);
+        $reviews = \App\Core\Database::fetchAll(
+            "SELECT * FROM reviews WHERE customer_id = :uid",
+            ['uid' => $userId]
+        );
+
+        $exportData = [
+            'export_metadata' => [
+                'platform'     => 'Primodomus Service Platform',
+                'compliance'   => 'Digital Personal Data Protection (DPDP) Act Foundation',
+                'generated_at' => date('c'),
+                'user_id'      => $userId,
+            ],
+            'account'  => $user,
+            'profile'  => $profile,
+            'consents' => $consents,
+            'bookings' => $bookings,
+            'invoices' => $invoices,
+            'reviews'  => $reviews,
+        ];
+
+        $response = Response::json($exportData, 200);
+        $filename = 'primodomus_data_export_' . $userId . '_' . date('Ymd_His') . '.json';
+        $response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        return $response;
+    }
+
+    public function requestDataDeletion(Request $request): Response
+    {
+        $userId = Auth::id();
+        $user = User::find($userId);
+        $reason = trim((string)$request->input('reason', 'Customer requested account and data erasure'));
+
+        // Log compliance audit entry
+        \App\Core\Logger::info("DPDP Data Erasure Request submitted by customer #{$userId}", [
+            'user_id' => $userId,
+            'reason'  => $reason,
+            'ip'      => $request->getIp(),
+        ]);
+
+        // Revoke marketing/general consents
+        \App\Models\Consent::record($userId, 'erasure_requested_' . date('Ymd'), $request->getIp());
+
+        // Notify Administrator of pending privacy request
+        \App\Core\Notifier::notifyAdminAlert(
+            'DPDP Data Erasure Request',
+            "Customer #{$userId} ({$user['name']}, {$user['phone']}) has formally requested personal data deletion. Reason: {$reason}",
+            ['user_id' => $userId, 'ip' => $request->getIp()]
+        );
+
+        \App\Core\View::setFlash('success', 'Your data erasure request has been formally recorded under the DPDP Act. Our compliance officer will process your request within the statutory timeframe (subject to statutory financial record retention requirements).');
+        return $this->redirect('/account/privacy');
+    }
 }
