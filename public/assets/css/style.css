@@ -40,9 +40,9 @@ img {
     gap: 8px;
     padding: 0 16px;
     border-radius: 9999px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: #0f6e56 !important;
     font-weight: 700;
     font-size: 14px;
@@ -709,11 +709,11 @@ nav.navbar.navbar-expand-lg.navbar-light.main_menu {
     top: 0 !important;
     z-index: 1040 !important;
     width: 100% !important;
-    background: rgba(255, 255, 255, 0.78) !important;
-    backdrop-filter: blur(20px) saturate(190%) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
-    border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
-    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+    background: rgba(255, 255, 255, 0.35) !important;
+    backdrop-filter: blur(24px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(200%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
     transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .navbar-light .navbar-brand {
@@ -2362,9 +2362,9 @@ ul.navbar-nav.mr-auto {
         padding: 10px 15px !important;
         position: sticky !important;
         top: 0 !important;
-        background: rgba(255, 255, 255, 0.85) !important;
-        backdrop-filter: blur(16px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+        background: rgba(255, 255, 255, 0.40) !important;
+        backdrop-filter: blur(20px) saturate(190%) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
     }
     .navbar-toggler {
         padding: 0.15rem 0.25rem;
@@ -2670,9 +2670,9 @@ ul.navbar-nav.mr-auto {
         padding: 10px 15px !important;
         position: sticky !important;
         top: 0 !important;
-        background: rgba(255, 255, 255, 0.85) !important;
-        backdrop-filter: blur(16px) saturate(180%) !important;
-        -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+        background: rgba(255, 255, 255, 0.40) !important;
+        backdrop-filter: blur(20px) saturate(190%) !important;
+        -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
     }
     .navbar-toggler {
         padding: 0.15rem 0.25rem;
