@@ -43,8 +43,19 @@ Router::get('/{service}-in-{city}', 'ServiceController@serviceInCity');
 Router::get('/book', 'BookingController@showForm');
 Router::post('/book', 'BookingController@submit', ['VerifyCsrf']);
 Router::get('/book-success', 'BookingController@success');
-Router::get('/cart', 'BookingController@showForm');
-Router::get('/cart.php', 'BookingController@showForm');
+
+Router::get('/cart', 'BookingController@cart');
+Router::get('/cart.php', 'BookingController@cart');
+Router::get('/api/cart', 'BookingController@apiCart');
+Router::post('/api/cart/add', 'BookingController@addToCart');
+Router::post('/api/cart/update', 'BookingController@updateCart');
+Router::post('/api/cart/remove', 'BookingController@removeFromCart');
+Router::post('/api/cart/clear', 'BookingController@clearCart');
+
+// Legacy ajax endpoints compatibility
+Router::post('/cartajax/ajax_cart_add.php', 'BookingController@addToCart');
+Router::post('/cartajax/ajax_cart_update.php', 'BookingController@updateCart');
+
 
 // ==========================================
 // UNIFIED AUTHENTICATION (ALL ROLES)

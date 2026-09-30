@@ -4,13 +4,16 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Core\Auth;
+use App\Core\Cart;
 use App\Core\Notifier;
 use App\Core\Request;
 use App\Core\Response;
+use App\Core\Upload;
 use App\Core\View;
 use App\Models\Booking;
 use App\Models\BookingAttachment;
 use App\Models\Service;
+use App\Models\ServiceArea;
 
 class BookingController extends Controller
 {
@@ -21,12 +24,110 @@ class BookingController extends Controller
         $allServices = Service::getActive();
 
         return $this->render('customer.book', [
-            'title'       => 'Book a Service | Primodomus',
+            'title'       => 'Schedule Doorstep Service | Primodomus',
+            'description' => 'Book verified home and office maintenance services with transparent starting prices and 24-hour guarantee.',
             'service'     => $service,
             'allServices' => $allServices,
         ], 'customer');
     }
 
+    public function cart(Request $request): Response
+    {
+        $cart = Cart::getDetails();
+
+        return $this->render('customer.cart', [
+            'title'       => 'Your Service Cart | Primodomus',
+            'description' => 'Review selected home cleaning and repair packages, calculate prices, and schedule your doorstep visit.',
+            'cart'        => $cart,
+        ], 'customer');
+    }
+
+    public function apiCart(Request $request): Response
+    {
+        $cart = Cart::getDetails();
+        return Response::json([
+            'cart_count' => $cart['count'],
+            'cart_total' => $cart['total'],
+            'cart'       => $cart,
+        ]);
+    }
+
+    public function addToCart(Request $request): Response
+    {
+        // Support both JSON body and standard form post / vendor_price_id
+        $serviceId = (int)($request->input('service_id') ?? $request->input('vendor_price_id') ?? 0);
+        $qty = (int)($request->input('quantity') ?? 1);
+
+        if ($serviceId <= 0) {
+            return Response::json(['success' => false, 'error' => 'Invalid service ID.'], 400);
+        }
+
+        $res = Cart::add($serviceId, max(1, $qty));
+        $details = Cart::getDetails();
+
+        return Response::json([
+            'status'     => $res['success'] ? 'success' : 'error',
+            'cart_count' => $details['count'],
+            'cart_total' => $details['total'],
+            'cart'       => $details,
+        ]);
+    }
+
+    public function updateCart(Request $request): Response
+    {
+        $serviceId = (int)($request->input('service_id') ?? $request->input('vendor_price_id') ?? 0);
+        $action = (string)$request->input('action', '');
+        $qty = (int)($request->input('quantity') ?? 0);
+
+        if ($serviceId <= 0) {
+            return Response::json(['success' => false, 'error' => 'Invalid service ID.'], 400);
+        }
+
+        $raw = Cart::getRaw();
+        $currentQty = $raw[$serviceId] ?? 1;
+
+        if ($action === 'plus') {
+            $newQty = $currentQty + 1;
+        } elseif ($action === 'minus') {
+            $newQty = $currentQty - 1;
+        } else {
+            $newQty = $qty;
+        }
+
+        Cart::update($serviceId, $newQty);
+        $details = Cart::getDetails();
+
+        return Response::json([
+            'status'     => 'success',
+            'cart_count' => $details['count'],
+            'cart_total' => $details['total'],
+            'cart'       => $details,
+        ]);
+    }
+
+    public function removeFromCart(Request $request): Response
+    {
+        $serviceId = (int)$request->input('service_id', 0);
+        Cart::remove($serviceId);
+        $details = Cart::getDetails();
+
+        return Response::json([
+            'status'     => 'success',
+            'cart_count' => $details['count'],
+            'cart_total' => $details['total'],
+            'cart'       => $details,
+        ]);
+    }
+
+    public function clearCart(Request $request): Response
+    {
+        Cart::clear();
+        return Response::json([
+            'status'     => 'success',
+            'cart_count' => 0,
+            'cart_total' => 0,
+        ]);
+    }
 
     public function submit(Request $request): Response
     {
@@ -41,17 +142,27 @@ class BookingController extends Controller
 
         if ($validator->fails()) {
             View::setFlash('error', $validator->firstError());
-            return $this->redirect('/book?service_id=' . (int)$request->input('service_id'));
+            $redirectUrl = $request->input('from_cart') ? '/cart' : '/book?service_id=' . (int)$request->input('service_id');
+            return $this->redirect($redirectUrl);
         }
 
-        $service = Service::find((int)$request->input('service_id'));
+        $serviceId = (int)$request->input('service_id');
+        $service = Service::find($serviceId);
         if (!$service || empty($service['is_active'])) {
-            View::setFlash('error', 'Selected service is currently unavailable.');
+            View::setFlash('error', 'The requested service is currently unavailable.');
             return $this->redirect('/services');
         }
 
+        // Pincode validation (optional but verified if supplied)
+        $pincode = $request->input('pincode') ? trim((string)$request->input('pincode')) : null;
+        if ($pincode && !preg_match('/^[0-9]{6}$/', $pincode)) {
+            View::setFlash('error', 'Please enter a valid 6-digit Indian postal pincode.');
+            return $this->redirect('/book?service_id=' . $serviceId);
+        }
+
         $bookingNo = Booking::generateBookingNo();
-        $customerId = Auth::id(); // optional, can be guest or logged-in customer
+        $customerId = Auth::id(); // Null for guest, or user ID if authenticated
+        $priority = in_array($request->input('priority'), ['high', 'urgent']) ? (string)$request->input('priority') : 'normal';
 
         $bookingId = Booking::create([
             'booking_no'     => $bookingNo,
@@ -61,19 +172,60 @@ class BookingController extends Controller
             'phone'          => preg_replace('/\D/', '', (string)$request->input('phone')),
             'email'          => $request->input('email') ? trim((string)$request->input('email')) : null,
             'address'        => trim((string)$request->input('address')),
-            'pincode'        => $request->input('pincode') ? trim((string)$request->input('pincode')) : null,
+            'pincode'        => $pincode,
             'preferred_date' => $request->input('preferred_date'),
             'preferred_time' => $request->input('preferred_time'),
             'issue_details'  => $request->input('issue_details') ? trim((string)$request->input('issue_details')) : null,
             'status'         => 'new',
-            'priority'       => 'normal',
+            'priority'       => $priority,
         ]);
 
-        // Trigger notification
-        Notifier::send('email', 'admin@primodomus.com', 'new_booking_admin', [
-            'booking_no' => $bookingNo,
-            'service'    => $service['name'],
-        ]);
+        // Process issue photo attachments securely if uploaded
+        $files = $_FILES['photos'] ?? null;
+        if ($files && is_array($files['name'])) {
+            for ($i = 0; $i < count($files['name']); $i++) {
+                if ($files['error'][$i] === UPLOAD_ERR_OK) {
+                    try {
+                        $singleFile = [
+                            'name'     => $files['name'][$i],
+                            'type'     => $files['type'][$i],
+                            'tmp_name' => $files['tmp_name'][$i],
+                            'error'    => $files['error'][$i],
+                            'size'     => $files['size'][$i],
+                        ];
+                        $uploadResult = Upload::processWithMetadata($singleFile, 'issues');
+                        BookingAttachment::create([
+                            'booking_id' => $bookingId,
+                            'file_path'  => $uploadResult['file_path'],
+                            'mime'       => $uploadResult['mime'],
+                            'size'       => $uploadResult['size'],
+                        ]);
+                    } catch (\Throwable $e) {
+                        // Log file upload warning without halting booking creation
+                        error_log("Issue photo upload skipped: " . $e->getMessage());
+                    }
+                }
+            }
+        }
+
+        // Clear cart if booking came from cart checkout
+        if ($request->input('from_cart')) {
+            Cart::clear();
+        }
+
+        // Trigger notifications
+        try {
+            Notifier::send('email', 'admin@primodomus.com', 'new_booking_admin', [
+                'booking_no' => $bookingNo,
+                'service'    => $service['name'],
+                'customer'   => $request->input('name'),
+                'phone'      => $request->input('phone'),
+                'date'       => $request->input('preferred_date'),
+                'time'       => $request->input('preferred_time'),
+            ]);
+        } catch (\Throwable) {
+            // Notification failure does not break booking completion
+        }
 
         return $this->redirect('/book-success?booking_no=' . urlencode($bookingNo));
     }
@@ -81,9 +233,11 @@ class BookingController extends Controller
     public function success(Request $request): Response
     {
         $bookingNo = (string)$request->query('booking_no', '');
+
         return $this->render('customer.book-success', [
-            'title'      => 'Booking Confirmed | Primodomus',
-            'booking_no' => $bookingNo,
+            'title'       => 'Booking Confirmed | Primodomus',
+            'description' => 'Your doorstep service booking has been confirmed with Primodomus.',
+            'booking_no'  => $bookingNo,
         ], 'customer');
     }
 }

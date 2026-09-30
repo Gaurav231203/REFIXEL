@@ -159,7 +159,59 @@
         }
       });
     });
+
+    // 4. Global Cart UI Synchronizer
+    function syncCartUI() {
+      fetch(baseUrl + '/api/cart')
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var count = d.cart_count || 0;
+          var total = d.cart_total || 0;
+
+          // Header Cart
+          var hdrText = document.getElementById('hdrCartText');
+          if (hdrText) {
+            if (count > 0) {
+              hdrText.className = '';
+              hdrText.innerHTML = count + ' item' + (count > 1 ? 's' : '') + ' · ₹' + Number(total).toLocaleString('en-IN');
+            } else {
+              hdrText.className = 'hc-empty';
+              hdrText.textContent = 'Cart';
+            }
+          }
+
+          // Footer Badge
+          var footerBadge = document.getElementById('footer_cart_badge');
+          if (footerBadge) {
+            if (count > 0) {
+              footerBadge.textContent = count;
+              footerBadge.style.display = 'inline-block';
+            } else {
+              footerBadge.style.display = 'none';
+            }
+          }
+
+          // Homepage Floating Cart Bar
+          var homeCart = document.getElementById('homeCartBar');
+          var homeCount = document.getElementById('cartItemCount');
+          var homePrice = document.getElementById('cartTotalPrice');
+          if (homeCart && homeCount && homePrice) {
+            if (count > 0) {
+              homeCount.textContent = count;
+              homePrice.textContent = '₹' + Number(total).toLocaleString('en-IN');
+              homeCart.classList.add('show');
+            } else {
+              homeCart.classList.remove('show');
+            }
+          }
+        })
+        .catch(function() {});
+    }
+
+    syncCartUI();
+    window.syncCartUI = syncCartUI;
   });
   </script>
 </body>
 </html>
+

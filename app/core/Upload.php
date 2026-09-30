@@ -65,4 +65,19 @@ class Upload
 
         return 'uploads/' . $subfolder . '/' . $randomName;
     }
+
+    public static function processWithMetadata(array $file, string $subfolder = 'issues'): array
+    {
+        $path = self::process($file, $subfolder);
+        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file(__DIR__ . '/../../public/' . $path) ?: 'application/octet-stream';
+        $size = file_exists(__DIR__ . '/../../public/' . $path) ? filesize(__DIR__ . '/../../public/' . $path) : $file['size'];
+
+        return [
+            'file_path' => $path,
+            'mime'      => $mime,
+            'size'      => $size,
+        ];
+    }
 }
+

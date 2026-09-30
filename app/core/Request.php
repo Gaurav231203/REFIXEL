@@ -13,12 +13,13 @@ class Request
     protected array $server;
     protected ?array $json = null;
 
-    public function __construct()
+    public function __construct(?array $query = null, ?array $post = null, ?array $server = null, ?array $files = null)
     {
-        $this->server = $_SERVER;
-        $this->query  = $_GET;
-        $this->post   = $_POST;
-        $this->files  = $_FILES;
+        $this->server = $server ?? $_SERVER;
+        $this->query  = $query ?? $_GET;
+        $this->post   = $post ?? $_POST;
+        $this->files  = $files ?? $_FILES;
+
 
         // Method detection and spoofing
         $rawMethod = strtoupper($this->server['REQUEST_METHOD'] ?? 'GET');
