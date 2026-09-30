@@ -34,13 +34,17 @@
             <?php foreach ($invoices as $inv): ?>
               <tr>
                 <td class="font-weight-bold text-dark"><?= \App\Core\View::e($inv['invoice_no']) ?></td>
-                <td><?= \App\Core\View::e($inv['booking_no'] ?? 'N/A') ?></td>
-                <td><?= \App\Core\View::e(substr($inv['created_at'], 0, 10)) ?></td>
-                <td class="font-weight-bold text-success">₹<?= number_format((float)$inv['total_amount'], 2) ?></td>
-                <td class="text-muted">₹<?= number_format((float)$inv['tax_amount'], 2) ?></td>
                 <td>
-                  <span class="badge badge-<?= $inv['status'] === 'paid' ? 'success' : 'warning' ?> p-2 font-weight-bold text-uppercase">
-                    <?= \App\Core\View::e($inv['status']) ?>
+                  <a href="<?= \App\Core\View::url('/account/bookings/' . (int)$inv['booking_id']) ?>" class="font-weight-bold" style="color:#0f6e56;">
+                    #<?= \App\Core\View::e($inv['booking_no'] ?? 'N/A') ?>
+                  </a>
+                </td>
+                <td><?= \App\Core\View::e(substr((string)$inv['issued_at'], 0, 10)) ?></td>
+                <td class="font-weight-bold text-success">₹<?= number_format((float)$inv['total'], 2) ?></td>
+                <td class="text-muted">₹<?= number_format((float)$inv['gst_amount'], 2) ?></td>
+                <td>
+                  <span class="badge badge-success p-2 font-weight-bold text-uppercase">
+                    PAID
                   </span>
                 </td>
                 <td>

@@ -60,12 +60,13 @@ $totalGst = $totalGst ?? 0.0;
             <th>Status</th>
             <th>Paid Date</th>
             <th>Invoice</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <?php if (empty($payments)): ?>
             <tr>
-              <td colspan="8" class="text-center py-5 text-muted">No payments recorded yet.</td>
+              <td colspan="9" class="text-center py-5 text-muted">No payments recorded yet.</td>
             </tr>
           <?php else: ?>
             <?php foreach ($payments as $p): ?>
@@ -97,6 +98,8 @@ $totalGst = $totalGst ?? 0.0;
                 <td>
                   <?php if ($p['status'] === 'paid'): ?>
                     <span class="badge badge-success">Paid</span>
+                  <?php elseif ($p['status'] === 'refunded'): ?>
+                    <span class="badge badge-danger">Refunded</span>
                   <?php elseif ($p['status'] === 'pending'): ?>
                     <span class="badge badge-warning text-dark">Pending</span>
                   <?php else: ?>
@@ -113,6 +116,21 @@ $totalGst = $totalGst ?? 0.0;
                     </a>
                   <?php else: ?>
                     <span class="text-muted small">No invoice</span>
+                  <?php endif; ?>
+                </td>
+                <td>
+                  <?php if ($p['status'] === 'paid'): ?>
+                    <form method="POST" action="<?= View::url('/admin/payments/' . $p['id'] . '/refund') ?>" class="d-inline" onsubmit="return confirm('Process refund of ₹<?= number_format((float)$p['amount'], 2) ?> for Booking #<?= View::e($p['booking_no']) ?>?');">
+                      <?= View::csrfField() ?>
+                      <input type="hidden" name="reason" value="Admin processed customer refund">
+                      <button type="submit" class="btn btn-sm btn-outline-danger py-0 px-2" style="font-size: 11px;">
+                        <i class="fa fa-undo mr-1"></i>Refund
+                      </button>
+                    </form>
+                  <?php elseif ($p['status'] === 'refunded'): ?>
+                    <span class="badge badge-dark">Refunded</span>
+                  <?php else: ?>
+                    <span class="text-muted small">&mdash;</span>
                   <?php endif; ?>
                 </td>
               </tr>

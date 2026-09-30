@@ -41,10 +41,222 @@ class AccountController extends Controller
             return $this->render('partials.404', ['title' => 'Booking Not Found'], 'customer')->setStatusCode(404);
         }
 
+        $payments = \App\Core\Database::fetchAll(
+            "SELECT * FROM payments WHERE booking_id = :bid ORDER BY id DESC",
+            ['bid' => $booking['id']]
+        );
+
+        $invoices = \App\Core\Database::fetchAll(
+            "SELECT i.*, p.method, p.amount as payment_amount
+             FROM invoices i
+             JOIN payments p ON i.payment_id = p.id
+             WHERE p.booking_id = :bid
+             ORDER BY i.id DESC",
+            ['bid' => $booking['id']]
+        );
+
+        $review = \App\Models\Review::findByBooking((int)$booking['id']);
+
         return $this->render('customer.account.booking-detail', [
-            'title'   => "Booking #{$booking['booking_no']} | Primodomus",
-            'booking' => $booking,
+            'title'    => "Booking #{$booking['booking_no']} | Primodomus",
+            'booking'  => $booking,
+            'payments' => $payments,
+            'invoices' => $invoices,
+            'review'   => $review,
         ], 'customer');
+    }
+
+    public function invoiceDetail(Request $request, string $id): Response
+    {
+        $invoice = Invoice::findWithDetails((int)$id);
+
+        if (!$invoice || (int)$invoice['customer_id'] !== Auth::id()) {
+            return $this->render('partials.404', ['title' => 'Invoice Not Found'], 'customer')->setStatusCode(404);
+        }
+
+        return $this->render('customer.account.invoice-detail', [
+            'title'   => "GST Invoice #{$invoice['invoice_no']} | Primodomus",
+            'invoice' => $invoice,
+        ], 'customer');
+    }
+
+    public function cancelBooking(Request $request, string $id): Response
+    {
+        $booking = Booking::find((int)$id);
+        if (!$booking || (int)$booking['customer_id'] !== Auth::id()) {
+            \App\Core\View::setFlash('error', 'Booking not found or unauthorized.');
+            return $this->redirect('/account/bookings');
+        }
+
+        if (!\App\Core\Workflow::canTransition((string)$booking['status'], \App\Core\Workflow::STATUS_CANCELLED, 'customer')) {
+            \App\Core\View::setFlash('error', "Booking in status '{$booking['status']}' cannot be cancelled.");
+            return $this->redirect('/account/bookings/' . $id);
+        }
+
+        $reason = trim((string)$request->input('reason', 'Cancelled by customer'));
+
+        try {
+            \App\Core\Workflow::transitionBooking(
+                (int)$id,
+                \App\Core\Workflow::STATUS_CANCELLED,
+                Auth::id(),
+                'customer',
+                $reason
+            );
+            \App\Core\View::setFlash('success', 'Your booking has been cancelled.');
+        } catch (\Throwable $e) {
+            \App\Core\View::setFlash('error', 'Cancellation failed: ' . $e->getMessage());
+        }
+
+        return $this->redirect('/account/bookings/' . $id);
+    }
+
+    public function rescheduleBooking(Request $request, string $id): Response
+    {
+        $booking = Booking::find((int)$id);
+        if (!$booking || (int)$booking['customer_id'] !== Auth::id()) {
+            \App\Core\View::setFlash('error', 'Booking not found or unauthorized.');
+            return $this->redirect('/account/bookings');
+        }
+
+        if (!\App\Core\Workflow::canTransition((string)$booking['status'], \App\Core\Workflow::STATUS_RESCHEDULED, 'customer')) {
+            \App\Core\View::setFlash('error', "Booking in status '{$booking['status']}' cannot be rescheduled.");
+            return $this->redirect('/account/bookings/' . $id);
+        }
+
+        $preferredDate = trim((string)$request->input('preferred_date'));
+        $preferredTime = trim((string)$request->input('preferred_time', '09:00 AM - 12:00 PM'));
+
+        if (empty($preferredDate) || strtotime($preferredDate) < strtotime(date('Y-m-d'))) {
+            \App\Core\View::setFlash('error', 'Please choose a valid upcoming service date.');
+            return $this->redirect('/account/bookings/' . $id);
+        }
+
+        try {
+            \App\Core\Database::query(
+                "UPDATE bookings SET preferred_date = :d, preferred_time = :t, updated_at = NOW() WHERE id = :id",
+                ['d' => $preferredDate, 't' => $preferredTime, 'id' => (int)$id]
+            );
+
+            \App\Core\Workflow::transitionBooking(
+                (int)$id,
+                \App\Core\Workflow::STATUS_RESCHEDULED,
+                Auth::id(),
+                'customer',
+                "Rescheduled by customer to {$preferredDate} ({$preferredTime})"
+            );
+
+            \App\Core\View::setFlash('success', "Booking rescheduled to {$preferredDate} successfully.");
+        } catch (\Throwable $e) {
+            \App\Core\View::setFlash('error', 'Rescheduling failed: ' . $e->getMessage());
+        }
+
+        return $this->redirect('/account/bookings/' . $id);
+    }
+
+    public function requestRefund(Request $request, string $id): Response
+    {
+        $booking = Booking::find((int)$id);
+        if (!$booking || (int)$booking['customer_id'] !== Auth::id()) {
+            \App\Core\View::setFlash('error', 'Booking not found or unauthorized.');
+            return $this->redirect('/account/bookings');
+        }
+
+        if (!\App\Core\Workflow::canTransition((string)$booking['status'], \App\Core\Workflow::STATUS_REFUND_REQUESTED, 'customer')) {
+            \App\Core\View::setFlash('error', "Refund cannot be requested for booking in '{$booking['status']}' status.");
+            return $this->redirect('/account/bookings/' . $id);
+        }
+
+        $paid = \App\Core\Database::fetchOne(
+            "SELECT id, amount FROM payments WHERE booking_id = :bid AND status = 'paid' LIMIT 1",
+            ['bid' => (int)$id]
+        );
+
+        if (!$paid) {
+            \App\Core\View::setFlash('error', 'No paid transactions were found for this booking.');
+            return $this->redirect('/account/bookings/' . $id);
+        }
+
+        $reason = trim((string)$request->input('reason', 'Customer refund request'));
+
+        try {
+            \App\Core\Workflow::transitionBooking(
+                (int)$id,
+                \App\Core\Workflow::STATUS_REFUND_REQUESTED,
+                Auth::id(),
+                'customer',
+                $reason
+            );
+
+            \App\Core\View::setFlash('success', 'Refund request submitted. Our accounts team will review and process your refund within 2-3 business days.');
+        } catch (\Throwable $e) {
+            \App\Core\View::setFlash('error', 'Refund request failed: ' . $e->getMessage());
+        }
+
+        return $this->redirect('/account/bookings/' . $id);
+    }
+
+    public function submitReview(Request $request, string $id): Response
+    {
+        $booking = Booking::find((int)$id);
+        if (!$booking || (int)$booking['customer_id'] !== Auth::id()) {
+            \App\Core\View::setFlash('error', 'Booking not found or unauthorized.');
+            return $this->redirect('/account/bookings');
+        }
+
+        if (!in_array((string)$booking['status'], ['completed', 'invoiced', 'reviewed'], true)) {
+            \App\Core\View::setFlash('error', 'Reviews can only be submitted after service completion.');
+            return $this->redirect('/account/bookings/' . $id);
+        }
+
+        if (\App\Models\Review::hasCustomerReviewed((int)$id)) {
+            \App\Core\View::setFlash('error', 'You have already submitted a review for this booking.');
+            return $this->redirect('/account/bookings/' . $id);
+        }
+
+        $rating = (int)$request->input('rating', 5);
+        $comment = trim((string)$request->input('comment', ''));
+
+        if ($rating < 1 || $rating > 5) {
+            \App\Core\View::setFlash('error', 'Please provide a valid rating between 1 and 5 stars.');
+            return $this->redirect('/account/bookings/' . $id);
+        }
+
+        if (empty($comment)) {
+            \App\Core\View::setFlash('error', 'Please share a brief comment about your service experience.');
+            return $this->redirect('/account/bookings/' . $id);
+        }
+
+        $job = \App\Core\Database::fetchOne(
+            "SELECT staff_id FROM jobs WHERE booking_id = :bid LIMIT 1",
+            ['bid' => (int)$id]
+        );
+
+        \App\Models\Review::create([
+            'booking_id'  => (int)$id,
+            'customer_id' => Auth::id(),
+            'staff_id'    => !empty($job['staff_id']) ? (int)$job['staff_id'] : null,
+            'rating'      => $rating,
+            'comment'     => $comment,
+            'is_approved' => 0,
+        ]);
+
+        if (in_array((string)$booking['status'], ['completed', 'invoiced'], true)) {
+            try {
+                \App\Core\Workflow::transitionBooking(
+                    (int)$id,
+                    \App\Core\Workflow::STATUS_REVIEWED,
+                    Auth::id(),
+                    'customer',
+                    'Customer submitted rating and review'
+                );
+            } catch (\Throwable $e) {
+                // Non-fatal if workflow status doesn't advance
+            }
+        }
+
+        \App\Core\View::setFlash('success', 'Thank you! Your review has been submitted for moderation.');
+        return $this->redirect('/account/bookings/' . $id);
     }
 
     public function invoices(Request $request): Response

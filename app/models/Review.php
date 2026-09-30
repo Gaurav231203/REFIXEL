@@ -50,5 +50,26 @@ class Review extends Model
              ORDER BY r.created_at DESC LIMIT {$limit}"
         );
     }
+
+    public static function findByBooking(int $bookingId): ?array
+    {
+        return Database::fetchOne(
+            "SELECT r.*, u.name as customer_name
+             FROM reviews r
+             JOIN users u ON r.customer_id = u.id
+             WHERE r.booking_id = :bid
+             LIMIT 1",
+            ['bid' => $bookingId]
+        );
+    }
+
+    public static function hasCustomerReviewed(int $bookingId): bool
+    {
+        $res = Database::fetchOne(
+            "SELECT id FROM reviews WHERE booking_id = :bid LIMIT 1",
+            ['bid' => $bookingId]
+        );
+        return !empty($res);
+    }
 }
 

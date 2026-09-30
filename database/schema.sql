@@ -160,7 +160,7 @@ CREATE TABLE bookings (
     preferred_date DATE NULL,
     preferred_time VARCHAR(30) NULL,
     issue_details TEXT NULL,
-    status ENUM('new','assigned','accepted','in_progress','completed','invoiced','reviewed','cancelled') NOT NULL DEFAULT 'new',
+    status ENUM('new','assigned','accepted','in_progress','completed','invoiced','reviewed','cancelled','rescheduled','refund_requested','refunded') NOT NULL DEFAULT 'new',
     priority ENUM('low','normal','high','urgent') NOT NULL DEFAULT 'normal',
     admin_notes TEXT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -86,7 +86,12 @@ Router::group(['middleware' => ['RequireRole:customer']], function () {
     Router::get('/account/bookings', 'AccountController@bookings');
     Router::get('/my-booking.php', 'AccountController@bookings'); // Legacy alias
     Router::get('/account/bookings/{id}', 'AccountController@bookingDetail');
+    Router::post('/account/bookings/{id}/cancel', 'AccountController@cancelBooking', ['VerifyCsrf']);
+    Router::post('/account/bookings/{id}/reschedule', 'AccountController@rescheduleBooking', ['VerifyCsrf']);
+    Router::post('/account/bookings/{id}/refund-request', 'AccountController@requestRefund', ['VerifyCsrf']);
+    Router::post('/account/bookings/{id}/review', 'AccountController@submitReview', ['VerifyCsrf']);
     Router::get('/account/invoices', 'AccountController@invoices');
+    Router::get('/account/invoices/{id}', 'AccountController@invoiceDetail');
     Router::get('/account/profile', 'AccountController@profile');
 });
 
@@ -129,6 +134,7 @@ Router::group(['middleware' => ['RequireRole:admin']], function () {
     // Payments & Invoices
     Router::get('/admin/payments', 'Admin\\PaymentController@index');
     Router::post('/admin/payments', 'Admin\\PaymentController@recordPayment', ['VerifyCsrf']);
+    Router::post('/admin/payments/{id}/refund', 'Admin\\PaymentController@refundPayment', ['VerifyCsrf']);
     Router::get('/admin/invoices/{id}', 'Admin\\PaymentController@showInvoice');
 
     // Reports & Analytics

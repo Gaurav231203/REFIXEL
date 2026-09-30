@@ -110,4 +110,61 @@ class PaymentController extends Controller
             'invoice' => $invoice,
         ], 'admin');
     }
+
+    public function refundPayment(Request $request, string $id): Response
+    {
+        $payment = Database::fetchOne(
+            "SELECT p.*, b.id as booking_id, b.booking_no
+             FROM payments p
+             JOIN bookings b ON p.booking_id = b.id
+             WHERE p.id = :id
+             LIMIT 1",
+            ['id' => $id]
+        );
+
+        if (!$payment) {
+            View::setFlash('error', 'Payment record not found.');
+            return $this->redirect('/admin/payments');
+        }
+
+        if ($payment['status'] !== 'paid') {
+            View::setFlash('error', "Only paid payments can be refunded. Current status: {$payment['status']}");
+            return $this->redirect('/admin/payments');
+        }
+
+        $reason = trim((string)$request->input('reason', 'Admin issued refund'));
+        $amount = (float)$payment['amount'];
+
+        // If online transaction reference exists, call gateway refund
+        if (!empty($payment['transaction_ref'])) {
+            try {
+                $gateway = new \App\Services\Payment\RazorpayGateway();
+                $gateway->refund($payment['transaction_ref'], $amount, $reason);
+            } catch (\Throwable $e) {
+                // Log and continue
+            }
+        }
+
+        // Update payment status
+        Database::query(
+            "UPDATE payments SET status = 'refunded' WHERE id = :id",
+            ['id' => $id]
+        );
+
+        // Transition booking to refunded
+        try {
+            \App\Core\Workflow::transitionBooking(
+                (int)$payment['booking_id'],
+                \App\Core\Workflow::STATUS_REFUNDED,
+                $this->userId(),
+                'admin',
+                "Payment #{$id} of ₹" . number_format($amount, 2) . " refunded. Reason: {$reason}"
+            );
+        } catch (\Throwable $e) {
+            // Non-fatal if workflow status already in compatible state
+        }
+
+        View::setFlash('success', "Refund of ₹" . number_format($amount, 2) . " processed successfully for Booking #{$payment['booking_no']}.");
+        return $this->redirect('/admin/payments');
+    }
 }

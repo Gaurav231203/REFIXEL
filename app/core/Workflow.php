@@ -7,15 +7,18 @@ use RuntimeException;
 
 class Workflow
 {
-    public const STATUS_NEW         = 'new';
-    public const STATUS_ASSIGNED    = 'assigned';
-    public const STATUS_ACCEPTED    = 'accepted';
-    public const STATUS_IN_PROGRESS = 'in_progress';
-    public const STATUS_COMPLETED   = 'completed';
-    public const STATUS_INVOICED    = 'invoiced';
-    public const STATUS_REVIEWED    = 'reviewed';
-    public const STATUS_CLOSED      = 'closed';
-    public const STATUS_CANCELLED   = 'cancelled';
+    public const STATUS_NEW              = 'new';
+    public const STATUS_ASSIGNED         = 'assigned';
+    public const STATUS_ACCEPTED         = 'accepted';
+    public const STATUS_IN_PROGRESS      = 'in_progress';
+    public const STATUS_COMPLETED        = 'completed';
+    public const STATUS_INVOICED         = 'invoiced';
+    public const STATUS_REVIEWED         = 'reviewed';
+    public const STATUS_CLOSED           = 'closed';
+    public const STATUS_CANCELLED        = 'cancelled';
+    public const STATUS_RESCHEDULED      = 'rescheduled';
+    public const STATUS_REFUND_REQUESTED = 'refund_requested';
+    public const STATUS_REFUNDED         = 'refunded';
 
     /**
      * Allowed forward status transitions.
@@ -23,21 +26,29 @@ class Workflow
     protected const ALLOWED_TRANSITIONS = [
         self::STATUS_NEW => [
             self::STATUS_ASSIGNED,
+            self::STATUS_RESCHEDULED,
+            self::STATUS_CANCELLED,
+        ],
+        self::STATUS_RESCHEDULED => [
+            self::STATUS_ASSIGNED,
+            self::STATUS_RESCHEDULED,
             self::STATUS_CANCELLED,
         ],
         self::STATUS_ASSIGNED => [
             self::STATUS_ACCEPTED,
             self::STATUS_ASSIGNED, // reassignment
+            self::STATUS_RESCHEDULED,
             self::STATUS_CANCELLED,
         ],
         self::STATUS_ACCEPTED => [
             self::STATUS_IN_PROGRESS,
             self::STATUS_ASSIGNED, // technician declined / reassigned
+            self::STATUS_RESCHEDULED,
             self::STATUS_CANCELLED,
         ],
         self::STATUS_IN_PROGRESS => [
             self::STATUS_COMPLETED,
-            self::STATUS_CANCELLED,
+            self::STATUS_CANCELLED, // emergency cancel
         ],
         self::STATUS_COMPLETED => [
             self::STATUS_INVOICED,
@@ -51,8 +62,19 @@ class Workflow
         self::STATUS_REVIEWED => [
             self::STATUS_CLOSED,
         ],
+        self::STATUS_CANCELLED => [
+            self::STATUS_REFUND_REQUESTED,
+            self::STATUS_REFUNDED,
+            self::STATUS_CLOSED,
+        ],
+        self::STATUS_REFUND_REQUESTED => [
+            self::STATUS_REFUNDED,
+            self::STATUS_CLOSED,
+        ],
+        self::STATUS_REFUNDED => [
+            self::STATUS_CLOSED,
+        ],
         self::STATUS_CLOSED => [],
-        self::STATUS_CANCELLED => [],
     ];
 
     public static function canTransition(string $currentStatus, string $newStatus, string $role): bool
@@ -67,7 +89,7 @@ class Workflow
 
         // Role-based authorization rules
         return match ($role) {
-            'admin' => true, // Admin can execute all valid transitions
+            'admin' => true, // Admin can execute all valid state machine transitions
             'staff' => match ($newStatus) {
                 self::STATUS_ACCEPTED,
                 self::STATUS_IN_PROGRESS,
@@ -75,7 +97,9 @@ class Workflow
                 default => false,
             },
             'customer' => match ($newStatus) {
-                self::STATUS_CANCELLED => in_array($currentStatus, [self::STATUS_NEW, self::STATUS_ASSIGNED], true),
+                self::STATUS_CANCELLED => in_array($currentStatus, [self::STATUS_NEW, self::STATUS_ASSIGNED, self::STATUS_RESCHEDULED], true),
+                self::STATUS_RESCHEDULED => in_array($currentStatus, [self::STATUS_NEW, self::STATUS_ASSIGNED, self::STATUS_RESCHEDULED], true),
+                self::STATUS_REFUND_REQUESTED => in_array($currentStatus, [self::STATUS_CANCELLED], true),
                 self::STATUS_REVIEWED => in_array($currentStatus, [self::STATUS_COMPLETED, self::STATUS_INVOICED], true),
                 default => false,
             },
@@ -117,7 +141,7 @@ class Workflow
 
             Database::query(
                 "UPDATE jobs SET status = :status, updated_at = NOW(){$extraSet} WHERE id = :id",
-                array_merge(['status' => $newStatus, 'id' => $jobId], $extraParams)
+                array_merge(['status' => in_array($newStatus, ['assigned', 'accepted', 'in_progress', 'completed'], true) ? $newStatus : $job['status'], 'id' => $jobId], $extraParams)
             );
 
             // Sync booking status with job status
@@ -140,6 +164,57 @@ class Workflow
                     'notes'       => $notes,
                 ]
             );
+
+            Database::commit();
+        } catch (\Throwable $e) {
+            Database::rollBack();
+            throw $e;
+        }
+    }
+
+    public static function transitionBooking(
+        int $bookingId,
+        string $newStatus,
+        int $changedByUserId,
+        string $role,
+        ?string $notes = null
+    ): void {
+        $booking = Database::fetchOne("SELECT id, status FROM bookings WHERE id = :id", ['id' => $bookingId]);
+        if (!$booking) {
+            throw new RuntimeException("Booking #{$bookingId} not found.");
+        }
+
+        $currentStatus = (string)$booking['status'];
+
+        if (!self::canTransition($currentStatus, $newStatus, $role)) {
+            throw new RuntimeException("Invalid status transition from '{$currentStatus}' to '{$newStatus}' for role '{$role}'.");
+        }
+
+        Database::beginTransaction();
+        try {
+            Database::query(
+                "UPDATE bookings SET status = :status, updated_at = NOW() WHERE id = :id",
+                ['status' => $newStatus, 'id' => $bookingId]
+            );
+
+            $job = Database::fetchOne("SELECT id, status FROM jobs WHERE booking_id = :bid", ['bid' => $bookingId]);
+            if ($job) {
+                if (in_array($newStatus, ['assigned', 'accepted', 'in_progress', 'completed'], true)) {
+                    Database::query("UPDATE jobs SET status = :st, updated_at = NOW() WHERE id = :jid", ['st' => $newStatus, 'jid' => $job['id']]);
+                }
+
+                Database::query(
+                    "INSERT INTO status_history (job_id, from_status, to_status, changed_by, notes, created_at)
+                     VALUES (:job_id, :from_status, :to_status, :changed_by, :notes, NOW())",
+                    [
+                        'job_id'      => $job['id'],
+                        'from_status' => $currentStatus,
+                        'to_status'   => $newStatus,
+                        'changed_by'  => $changedByUserId,
+                        'notes'       => $notes,
+                    ]
+                );
+            }
 
             Database::commit();
         } catch (\Throwable $e) {

@@ -174,6 +174,7 @@ assert(count($currentSkills) === 3, "Expected 3 skill mappings");
 echo "Test 7: Staff creation, status toggling, and skill assignment - PASSED\n";
 
 // Test 8: Services & Categories Management
+Database::query("DELETE FROM bookings WHERE service_id IN (SELECT id FROM services WHERE slug = 'balcony-deep-pressure-wash')");
 Database::query("DELETE FROM services WHERE slug = 'balcony-deep-pressure-wash'");
 $createSvcReq = new Request([], [
     '_csrf'          => Csrf::token(),
