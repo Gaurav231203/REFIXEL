@@ -9,10 +9,10 @@
 
         <div class="footer_social_icons">
           <ul>
-            <li><a href="https://www.facebook.com/primodomus/" target="_blank"><img src="<?= \App\Core\View::asset('img/facebook.png') ?>" alt="facebook"></a></li>
-            <li><a href="https://www.instagram.com/primodomus/" target="_blank"><img src="<?= \App\Core\View::asset('img/instagram.png') ?>" alt="instagram"></a></li>
-            <li><a href="https://www.linkedin.com/company/primodomus/" target="_blank"><img src="<?= \App\Core\View::asset('img/linkedin.png') ?>" alt="linkedin"></a></li>
-            <li><a href="https://twitter.com/primodomus" target="_blank"><img src="<?= \App\Core\View::asset('img/twitter.png') ?>" alt="twitter"></a></li>
+            <li><a href="https://www.facebook.com/primodomus/" target="_blank" rel="noopener"><img src="<?= \App\Core\View::asset('img/facebook.png') ?>" alt="facebook" width="32" height="32" loading="lazy" decoding="async"></a></li>
+            <li><a href="https://www.instagram.com/primodomus/" target="_blank" rel="noopener"><img src="<?= \App\Core\View::asset('img/instagram.png') ?>" alt="instagram" width="32" height="32" loading="lazy" decoding="async"></a></li>
+            <li><a href="https://www.linkedin.com/company/primodomus/" target="_blank" rel="noopener"><img src="<?= \App\Core\View::asset('img/linkedin.png') ?>" alt="linkedin" width="32" height="32" loading="lazy" decoding="async"></a></li>
+            <li><a href="https://twitter.com/primodomus" target="_blank" rel="noopener"><img src="<?= \App\Core\View::asset('img/twitter.png') ?>" alt="twitter" width="32" height="32" loading="lazy" decoding="async"></a></li>
           </ul>
         </div>
       </div>

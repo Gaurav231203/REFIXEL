@@ -236,6 +236,24 @@
 
     syncCartUI();
     window.syncCartUI = syncCartUI;
+
+    // Form double-submission prevention and loading state
+    document.querySelectorAll('form').forEach(function(form) {
+      if (form.method && form.method.toUpperCase() === 'POST' && !form.dataset.noLoading) {
+        form.addEventListener('submit', function() {
+          var submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+          if (submitBtn && !submitBtn.disabled) {
+            setTimeout(function() {
+              submitBtn.disabled = true;
+              if (submitBtn.tagName === 'BUTTON') {
+                submitBtn.dataset.originalHtml = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin mr-1"></i> Processing...';
+              }
+            }, 10);
+          }
+        });
+      }
+    });
   });
   </script>
 </body>

@@ -3,16 +3,18 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Core\Cache;
 use App\Core\Database;
 
 class Setting extends Model
 {
     protected static string $table = 'settings';
+    protected const CACHE_KEY = 'site_settings_map';
 
     public static function get(string $key, mixed $default = null): mixed
     {
-        $res = Database::fetchOne("SELECT setting_value FROM settings WHERE setting_key = :k LIMIT 1", ['k' => $key]);
-        return $res['setting_value'] ?? $default;
+        $all = self::getAllKeyValue();
+        return $all[$key] ?? $default;
     }
 
     public static function set(string $key, string $value): void
@@ -22,15 +24,18 @@ class Setting extends Model
              ON DUPLICATE KEY UPDATE setting_value = :v2",
             ['k' => $key, 'v' => $value, 'v2' => $value]
         );
+        Cache::forget(self::CACHE_KEY);
     }
 
     public static function getAllKeyValue(): array
     {
-        $rows = Database::fetchAll("SELECT setting_key, setting_value FROM settings");
-        $map = [];
-        foreach ($rows as $r) {
-            $map[$r['setting_key']] = $r['setting_value'];
-        }
-        return $map;
+        return Cache::remember(self::CACHE_KEY, 300, function () {
+            $rows = Database::fetchAll("SELECT setting_key, setting_value FROM settings");
+            $map = [];
+            foreach ($rows as $r) {
+                $map[$r['setting_key']] = $r['setting_value'];
+            }
+            return $map;
+        });
     }
 }

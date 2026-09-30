@@ -15,6 +15,7 @@ html,
 body {
     height: 100%;
     line-height: var(--bs-body-line-height);
+    overflow-x: hidden;
 }
 
 body {
@@ -119,8 +120,10 @@ img {
     position: fixed;
     width: 100%;
     bottom: 0;
-    z-index: 3;
-	padding: 10px 15px 9px 15px;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+	padding: 8px 15px;
 }
 .bottomBarNavbar ul {
     list-style: none;
@@ -133,6 +136,7 @@ img {
 }
 .bottomBarNavbar ul li {
     text-align: center;
+    flex: 1;
 }
 .bottomBarNavbar ul li:last-child {
     border-right: none;
@@ -140,27 +144,38 @@ img {
 .bottomBarNavbar ul li a {
     text-decoration: none;
     color: inherit;
-	position:relative;
+	position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
 }
 .bottomBarNavbar ul li a span {
     position: absolute;
-    top: -9px;
-    width: 16px;
-    height: 16px;
-    display: block;
+    top: -4px;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: #0f6e56;
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 700;
     color: #fff;
-    right: 10px;
-    border-radius: 15px;
+    right: 4px;
+    border-radius: 50%;
 }
 .bottomBarNavbar ul li a img {
     width: 22px;
-    margin: 0 0 5px 0;
+    height: 22px;
+    margin: 0 0 3px 0;
 }
 .bottomBarNavbar ul li a h6{
-	margin:0px;
-	font-size:13px;
+	margin: 0px;
+	font-size: 12px;
+    font-weight: 500;
 }
 
 
@@ -2305,6 +2320,9 @@ ul.navbar-nav.mr-auto {
 	.bottomBarNavbar{
 		display:flex;
 	}
+    body {
+        padding-bottom: 65px;
+    }
     .navbar-toggler-icon {
         width: 26px;
         height: 26px;

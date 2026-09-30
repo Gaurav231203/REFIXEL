@@ -90,13 +90,13 @@ $currentCitySlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $curren
     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img src="<?= \App\Core\View::asset('img/Full-home-clean.jpg') ?>" class="d-block w-100" style="border-radius:12px; max-height:220px; object-fit:cover;" alt="Full Home Cleaning">
+          <img src="<?= \App\Core\View::asset('img/Full-home-clean.jpg') ?>" class="d-block w-100" style="border-radius:12px; max-height:220px; object-fit:cover;" alt="Full Home Cleaning" fetchpriority="high">
         </div>
         <div class="carousel-item">
-          <img src="<?= \App\Core\View::asset('img/Painting-Services.png') ?>" class="d-block w-100" style="border-radius:12px; max-height:220px; object-fit:cover;" alt="Painting Services">
+          <img src="<?= \App\Core\View::asset('img/Painting-Services.png') ?>" class="d-block w-100" style="border-radius:12px; max-height:220px; object-fit:cover;" alt="Painting Services" loading="lazy" decoding="async">
         </div>
         <div class="carousel-item">
-          <img src="<?= \App\Core\View::asset('img/AC-Services.webp') ?>" class="d-block w-100" style="border-radius:12px; max-height:220px; object-fit:cover;" alt="AC Services">
+          <img src="<?= \App\Core\View::asset('img/AC-Services.webp') ?>" class="d-block w-100" style="border-radius:12px; max-height:220px; object-fit:cover;" alt="AC Services" loading="lazy" decoding="async">
         </div>
       </div>
       <button class="carousel-control-prev" type="button" data-target="#carouselExampleControls" data-slide="prev">
@@ -175,7 +175,7 @@ $currentCitySlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $curren
 
         <div class="whyus_item">
           <div class="whyus_item_img">
-            <img src="<?= \App\Core\View::asset('img/trust.webp') ?>" alt="Verified">
+            <img src="<?= \App\Core\View::asset('img/trust.webp') ?>" alt="Verified" width="60" height="60" loading="lazy" decoding="async">
             <div class="bottm_arrow"></div>
           </div>
           <div class="whyus_content">
@@ -186,7 +186,7 @@ $currentCitySlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $curren
 
         <div class="whyus_item">
           <div class="whyus_item_img">
-            <img src="<?= \App\Core\View::asset('img/Services_Single.webp') ?>" alt="Matched to your needs">
+            <img src="<?= \App\Core\View::asset('img/Services_Single.webp') ?>" alt="Matched to your needs" width="60" height="60" loading="lazy" decoding="async">
             <div class="bottm_arrow"></div>
           </div>
           <div class="whyus_content">
@@ -197,7 +197,7 @@ $currentCitySlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $curren
 
         <div class="whyus_item">
           <div class="whyus_item_img">
-            <img src="<?= \App\Core\View::asset('img/repair.webp') ?>" alt="Customer support">
+            <img src="<?= \App\Core\View::asset('img/repair.webp') ?>" alt="Customer support" width="60" height="60" loading="lazy" decoding="async">
           </div>
           <div class="whyus_content">
             <h4>Customer support at every step.</h4>
@@ -208,7 +208,7 @@ $currentCitySlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $curren
 
       <div class="col-md-6">
         <div class="choose_right_bar">
-          <img src="<?= \App\Core\View::asset('img/find-expert.webp') ?>" alt="Happy Customers">
+          <img src="<?= \App\Core\View::asset('img/find-expert.webp') ?>" alt="Happy Customers" loading="lazy" decoding="async">
           <div class="happy_clients">
             <ul>
               <li>400+ <h6>Verified Professionals</h6></li>
@@ -288,7 +288,7 @@ $currentCitySlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $curren
   <div class="banner-visual">
     <div class="partners-container">
       <div class="partner-char">
-        <img src="<?= \App\Core\View::asset('img/service_partners_p.png') ?>" alt="Home Cleaning Partner">
+        <img src="<?= \App\Core\View::asset('img/service_partners_p.png') ?>" alt="Home Cleaning Partner" loading="lazy" decoding="async">
         <div class="service-tag tag-left">
           <div class="icon-box">
             <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
