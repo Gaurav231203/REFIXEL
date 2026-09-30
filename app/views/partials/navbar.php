@@ -2,13 +2,13 @@
 $user = \App\Core\Auth::user();
 ?>
 <nav class="navbar navbar-expand-lg navbar-light main_menu">
-  <div class="container">
+  <div class="container d-flex align-items-center justify-content-between">
     <a class="navbar-brand" href="<?= \App\Core\View::url('/') ?>">
       <img src="<?= \App\Core\View::asset('img/logo2.svg') ?>" alt="Primodomus">
     </a>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
+    <div class="d-flex align-items-center ml-auto">
+      <div class="d-none d-lg-flex align-items-center mr-3">
         <a class="hdr-cart" id="hdrCart" href="<?= \App\Core\View::url('/cart') ?>" aria-label="Cart">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
@@ -16,10 +16,9 @@ $user = \App\Core\Auth::user();
           </svg>
           <span id="hdrCartText" class="hc-empty">Cart</span>
         </a>
-      </ul>
-    </div>
+      </div>
 
-    <div class="our_cart">
+      <div class="our_cart">
       <ul>
         <?php if ($user): ?>
           <li class="position-relative">
@@ -58,5 +57,6 @@ $user = \App\Core\Auth::user();
         <?php endif; ?>
       </ul>
     </div>
+  </div>
   </div>
 </nav>
