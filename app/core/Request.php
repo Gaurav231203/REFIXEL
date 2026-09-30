@@ -62,6 +62,11 @@ class Request
         return $this->path;
     }
 
+    public function path(): string
+    {
+        return $this->path;
+    }
+
     public function isMethod(string $method): bool
     {
         return $this->method === strtoupper($method);

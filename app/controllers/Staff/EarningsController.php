@@ -13,13 +13,26 @@ class EarningsController extends Controller
 {
     public function index(Request $request): Response
     {
-        $earnings = StaffEarning::getByStaff(Auth::id());
-        $totalEarned = array_sum(array_column($earnings, 'amount'));
+        $staffId = Auth::id();
+        $summary = StaffEarning::getSummary($staffId);
+        $allEarnings = StaffEarning::getByStaff($staffId);
+
+        $selectedMonth = $request->query('month');
+        if ($selectedMonth) {
+            $earnings = array_filter($allEarnings, fn($e) => $e['month'] === $selectedMonth);
+        } else {
+            $earnings = $allEarnings;
+        }
+
+        // Distinct months for filter dropdown
+        $availableMonths = array_values(array_unique(array_column($allEarnings, 'month')));
 
         return $this->render('staff.earnings', [
-            'title'       => 'My Earnings | Primodomus Staff',
-            'earnings'    => $earnings,
-            'totalEarned' => $totalEarned,
+            'title'           => 'My Earnings & Payouts | Primodomus Staff',
+            'summary'         => $summary,
+            'earnings'        => $earnings,
+            'selectedMonth'   => $selectedMonth,
+            'availableMonths' => $availableMonths,
         ], 'staff');
     }
 }

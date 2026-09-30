@@ -132,11 +132,21 @@ Router::group(['middleware' => ['RequireRole:admin']], function () {
 // ==========================================
 Router::group(['middleware' => ['RequireRole:staff']], function () {
     Router::get('/staff', 'Staff\\DashboardController@index');
+    Router::get('/staff/dashboard', 'Staff\\DashboardController@index');
+
     Router::get('/staff/jobs', 'Staff\\JobController@index');
     Router::get('/staff/jobs/{id}', 'Staff\\JobController@show');
+    Router::post('/staff/jobs/{id}/accept', 'Staff\\JobController@accept', ['VerifyCsrf']);
+    Router::post('/staff/jobs/{id}/on-the-way', 'Staff\\JobController@onTheWay', ['VerifyCsrf']);
+    Router::post('/staff/jobs/{id}/start', 'Staff\\JobController@start', ['VerifyCsrf']);
+    Router::post('/staff/jobs/{id}/photos', 'Staff\\JobController@uploadPhoto', ['VerifyCsrf']);
     Router::get('/staff/jobs/{id}/complete', 'Staff\\JobController@complete');
+    Router::post('/staff/jobs/{id}/complete', 'Staff\\JobController@processComplete', ['VerifyCsrf']);
+
     Router::get('/staff/earnings', 'Staff\\EarningsController@index');
+
     Router::get('/staff/profile', 'Staff\\ProfileController@index');
+    Router::post('/staff/profile', 'Staff\\ProfileController@update', ['VerifyCsrf']);
 });
 
 // ==========================================

@@ -79,5 +79,36 @@ class Upload
             'size'      => $size,
         ];
     }
+
+    public static function processMultiple(array $files, string $subfolder = 'jobs'): array
+    {
+        $results = [];
+        if (!isset($files['name']) || !is_array($files['name'])) {
+            return $results;
+        }
+
+        $count = count($files['name']);
+        for ($i = 0; $i < $count; $i++) {
+            if (empty($files['name'][$i]) || ($files['error'][$i] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+
+            $single = [
+                'name'     => $files['name'][$i],
+                'type'     => $files['type'][$i] ?? '',
+                'tmp_name' => $files['tmp_name'][$i],
+                'error'    => $files['error'][$i],
+                'size'     => $files['size'][$i],
+            ];
+
+            try {
+                $results[] = self::processWithMetadata($single, $subfolder);
+            } catch (\Throwable $e) {
+                // Continue with next file
+            }
+        }
+
+        return $results;
+    }
 }
 

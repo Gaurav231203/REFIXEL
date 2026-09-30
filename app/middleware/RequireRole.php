@@ -45,6 +45,11 @@ class RequireRole
             return Response::redirect($redirectPath);
         }
 
+        if (!empty(Auth::user()['must_change_password']) && $request->path() !== '/change-password') {
+            View::setFlash('warning', 'Please change your temporary password before accessing your account.');
+            return Response::redirect('/change-password');
+        }
+
         return null;
     }
 }

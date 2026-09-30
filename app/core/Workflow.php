@@ -90,7 +90,7 @@ class Workflow
         string $role,
         ?string $notes = null
     ): void {
-        $job = Database::fetchOne("SELECT id, status FROM jobs WHERE id = :id", ['id' => $jobId]);
+        $job = Database::fetchOne("SELECT id, status, booking_id FROM jobs WHERE id = :id", ['id' => $jobId]);
         if (!$job) {
             throw new RuntimeException("Job #{$jobId} not found.");
         }
@@ -103,11 +103,30 @@ class Workflow
 
         Database::beginTransaction();
         try {
-            // Update jobs table
+            // Build dynamic jobs update based on new status
+            $extraSet = "";
+            $extraParams = [];
+
+            if ($newStatus === self::STATUS_ACCEPTED) {
+                $extraSet = ", accepted_at = IFNULL(accepted_at, NOW())";
+            } elseif ($newStatus === self::STATUS_IN_PROGRESS) {
+                $extraSet = ", started_at = IFNULL(started_at, NOW())";
+            } elseif ($newStatus === self::STATUS_COMPLETED) {
+                $extraSet = ", completed_at = IFNULL(completed_at, NOW())";
+            }
+
             Database::query(
-                "UPDATE jobs SET status = :status, updated_at = NOW() WHERE id = :id",
-                ['status' => $newStatus, 'id' => $jobId]
+                "UPDATE jobs SET status = :status, updated_at = NOW(){$extraSet} WHERE id = :id",
+                array_merge(['status' => $newStatus, 'id' => $jobId], $extraParams)
             );
+
+            // Sync booking status with job status
+            if (!empty($job['booking_id'])) {
+                Database::query(
+                    "UPDATE bookings SET status = :status, updated_at = NOW() WHERE id = :bid",
+                    ['status' => $newStatus, 'bid' => $job['booking_id']]
+                );
+            }
 
             // Record in status_history
             Database::query(
@@ -127,5 +146,29 @@ class Workflow
             Database::rollBack();
             throw $e;
         }
+    }
+
+    public static function recordSubAction(
+        int $jobId,
+        string $subAction,
+        int $changedByUserId,
+        ?string $notes = null
+    ): void {
+        $job = Database::fetchOne("SELECT id, status FROM jobs WHERE id = :id", ['id' => $jobId]);
+        if (!$job) {
+            throw new RuntimeException("Job #{$jobId} not found.");
+        }
+
+        Database::query(
+            "INSERT INTO status_history (job_id, from_status, to_status, changed_by, notes, created_at)
+             VALUES (:job_id, :from_status, :to_status, :changed_by, :notes, NOW())",
+            [
+                'job_id'      => $jobId,
+                'from_status' => $job['status'],
+                'to_status'   => $subAction,
+                'changed_by'  => $changedByUserId,
+                'notes'       => $notes,
+            ]
+        );
     }
 }
