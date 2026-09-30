@@ -262,46 +262,48 @@ $currentCitySlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $curren
 </div>
 
 <!-- Partner Program Banner -->
-<section class="partner-banner">
-  <div class="bg-pattern pattern-1"></div>
-  <div class="bg-pattern pattern-2"></div>
+<div class="container my-5">
+  <section class="partner-banner">
+    <div class="bg-pattern pattern-1"></div>
+    <div class="bg-pattern pattern-2"></div>
 
-  <div class="banner-content">
-    <div class="partner-badge">
-      <svg viewBox="0 0 24 24">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-      </svg>
-      Partner Program
+    <div class="banner-content">
+      <div class="partner-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        Partner Program
+      </div>
+      <h2 class="banner-title">Grow your business with Primodomus</h2>
+      <p class="banner-subtitle">
+        India's fast-growing Home & Professional Services platform — connecting skilled professionals with thousands of customers across multiple cities.
+      </p>
+      <a href="<?= \App\Core\View::url('/contact') ?>" class="cta-button">
+        Become a Service Partner
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
     </div>
-    <h2 class="banner-title">Grow your business with Primodomus</h2>
-    <p class="banner-subtitle">
-      India's fast-growing Home & Professional Services platform — connecting skilled professionals with thousands of customers across multiple cities.
-    </p>
-    <a href="<?= \App\Core\View::url('/contact') ?>" class="cta-button">
-      Become a Service Partner
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
-  </div>
 
-  <div class="banner-visual">
-    <div class="partners-container">
-      <div class="partner-char">
-        <img src="<?= \App\Core\View::asset('img/service_partners_p.png') ?>" alt="Home Cleaning Partner" loading="lazy" decoding="async">
-        <div class="service-tag tag-left">
-          <div class="icon-box">
-            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-          </div>
-          <div class="tag-info">
-            <span class="tag-title">Home Cleaning</span>
-            <span class="tag-desc">Service Provider</span>
+    <div class="banner-visual">
+      <div class="partners-container">
+        <div class="partner-char">
+          <img src="<?= \App\Core\View::asset('img/service_partners_p.png') ?>" alt="Home Cleaning Partner" loading="lazy" decoding="async">
+          <div class="service-tag tag-left">
+            <div class="icon-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            </div>
+            <div class="tag-info">
+              <span class="tag-title">Home Cleaning</span>
+              <span class="tag-desc">Service Provider</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
 <!-- Mini Floating Cart Bar -->
 <div class="homecart_items" id="homeCartBar">
