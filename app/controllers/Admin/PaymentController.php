@@ -80,6 +80,17 @@ class PaymentController extends Controller
         // Generate GST Invoice
         $invoice = InvoiceBuilder::createForPayment($paymentId, $amount);
 
+        // Trigger invoice notification to customer
+        try {
+            \App\Core\Notifier::notifyInvoiceCreated($invoice, [
+                'name'  => $booking['name'],
+                'email' => $booking['email'] ?? null,
+                'phone' => $booking['phone'],
+            ]);
+        } catch (\Throwable $e) {
+            \App\Core\Logger::error("Invoice notification skipped: " . $e->getMessage());
+        }
+
         View::setFlash('success', "Payment of ₹" . number_format($amount, 2) . " recorded and GST Invoice #{$invoice['invoice_no']} generated.");
         return $this->redirect('/admin/payments');
     }

@@ -145,12 +145,11 @@ class AuthController extends Controller
                 ['ident' => $identifier, 'hash' => $tokenHash, 'expires' => $expiresAt]
             );
 
-            // In local/demo, we notify or log
-            Notifier::send('email', $user['email'] ?? $identifier, 'password_reset', [
-                'name'  => $user['name'],
-                'token' => $token,
-                'link'  => View::url('/reset-password?token=' . $token),
-            ]);
+            // Dispatch password reset email
+            Notifier::notifyPasswordReset(
+                $user['email'] ?? $identifier,
+                View::url('/reset-password?token=' . $token)
+            );
 
             // For testing convenience in development, store token in session flash
             View::setFlash('success', 'A password reset link has been dispatched.');

@@ -152,6 +152,18 @@ class BookingController extends Controller
         }
 
         Booking::update((int)$id, ['status' => 'assigned']);
+
+        // Notify technician of assignment
+        try {
+            $staffUser = Database::fetchOne("SELECT name, email, phone FROM users WHERE id = :sid", ['sid' => $staffId]);
+            $bookingWithDetails = Booking::findWithDetails((int)$id);
+            if ($staffUser && $bookingWithDetails) {
+                \App\Core\Notifier::notifyStaffAssigned($bookingWithDetails, $staffUser);
+            }
+        } catch (\Throwable $e) {
+            \App\Core\Logger::error("Staff assignment notification error: " . $e->getMessage());
+        }
+
         View::setFlash('success', 'Technician successfully assigned to booking.');
 
         return $this->redirect('/admin/bookings/' . $id);

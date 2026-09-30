@@ -213,18 +213,24 @@ class BookingController extends Controller
             Cart::clear();
         }
 
-        // Trigger notifications
+        // Trigger notifications (admin alert + customer confirmation)
         try {
-            Notifier::send('email', 'admin@primodomus.com', 'new_booking_admin', [
-                'booking_no' => $bookingNo,
-                'service'    => $service['name'],
-                'customer'   => $request->input('name'),
-                'phone'      => $request->input('phone'),
-                'date'       => $request->input('preferred_date'),
-                'time'       => $request->input('preferred_time'),
-            ]);
-        } catch (\Throwable) {
+            $bookingRecord = [
+                'booking_no'     => $bookingNo,
+                'service_name'   => $service['name'],
+                'name'           => trim((string)$request->input('name')),
+                'phone'          => preg_replace('/\D/', '', (string)$request->input('phone')),
+                'email'          => $request->input('email') ? trim((string)$request->input('email')) : null,
+                'address'        => trim((string)$request->input('address')),
+                'city'           => $pincode ? "Pincode: {$pincode}" : 'Service Area',
+                'preferred_date' => (string)$request->input('preferred_date'),
+                'preferred_time' => (string)$request->input('preferred_time'),
+            ];
+            Notifier::notifyNewBookingAdmin($bookingRecord);
+            Notifier::notifyBookingConfirmationCustomer($bookingRecord);
+        } catch (\Throwable $e) {
             // Notification failure does not break booking completion
+            Logger::error("Booking notification error: " . $e->getMessage());
         }
 
         return $this->redirect('/book-success?booking_no=' . urlencode($bookingNo));

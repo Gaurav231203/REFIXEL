@@ -166,6 +166,23 @@ class Workflow
             );
 
             Database::commit();
+
+            // Dispatch lifecycle notifications
+            try {
+                if (!empty($job['booking_id'])) {
+                    $bDetails = \App\Models\Booking::findWithDetails((int)$job['booking_id']);
+                    if ($bDetails) {
+                        if ($newStatus === self::STATUS_COMPLETED) {
+                            $sDetails = !empty($bDetails['staff_name']) ? ['name' => $bDetails['staff_name']] : null;
+                            Notifier::notifyJobCompleted($bDetails, $sDetails);
+                        } else {
+                            Notifier::notifyBookingStatusChange($bDetails, $newStatus, $notes);
+                        }
+                    }
+                }
+            } catch (\Throwable $ne) {
+                Logger::error("Job transition notification skipped: " . $ne->getMessage());
+            }
         } catch (\Throwable $e) {
             Database::rollBack();
             throw $e;
@@ -217,6 +234,21 @@ class Workflow
             }
 
             Database::commit();
+
+            // Dispatch lifecycle notifications
+            try {
+                $bDetails = \App\Models\Booking::findWithDetails($bookingId);
+                if ($bDetails) {
+                    if ($newStatus === self::STATUS_COMPLETED) {
+                        $sDetails = !empty($bDetails['staff_name']) ? ['name' => $bDetails['staff_name']] : null;
+                        Notifier::notifyJobCompleted($bDetails, $sDetails);
+                    } else {
+                        Notifier::notifyBookingStatusChange($bDetails, $newStatus, $notes);
+                    }
+                }
+            } catch (\Throwable $ne) {
+                Logger::error("Booking transition notification skipped: " . $ne->getMessage());
+            }
         } catch (\Throwable $e) {
             Database::rollBack();
             throw $e;
