@@ -16,12 +16,38 @@
   <meta property="og:url" content="<?= \App\Core\View::e($canonicalUrl ?? \App\Core\View::url($_SERVER['REQUEST_URI'] ?? '/')) ?>">
   <meta property="og:type" content="website">
 
-  <?php if (!empty($schemaData)): ?>
-    <script type="application/ld+json">
-      <?= json_encode($schemaData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
-    </script>
-  <?php endif; ?>
-
+  <?php
+    $appUrl = \App\Core\Env::get('APP_URL', 'https://www.primodomus.com');
+    $defaultSchema = [
+      '@context' => 'https://schema.org',
+      '@type'    => 'HomeAndConstructionBusiness',
+      'name'     => \App\Models\Setting::get('company_name', 'Primodomus Home Services'),
+      'url'      => $appUrl,
+      'logo'     => $appUrl . '/assets/img/logo.svg',
+      'image'    => $appUrl . '/assets/img/hero-banner.webp',
+      'telephone'=> \App\Models\Setting::get('company_phone', '+91 99533 58855'),
+      'email'    => \App\Models\Setting::get('company_email', 'care@primodomus.com'),
+      'priceRange'=> '₹₹',
+      'address'  => [
+        '@type'          => 'PostalAddress',
+        'streetAddress'  => \App\Models\Setting::get('company_address', 'Cyber City, DLF Phase 2'),
+        'addressLocality'=> 'Gurugram',
+        'addressRegion'  => 'Haryana',
+        'postalCode'     => '122002',
+        'addressCountry' => 'IN',
+      ],
+      'openingHoursSpecification' => [
+        '@type'     => 'OpeningHoursSpecification',
+        'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        'opens'     => '08:00',
+        'closes'    => '20:00',
+      ],
+    ];
+    $activeSchema = !empty($schemaData) ? $schemaData : $defaultSchema;
+  ?>
+  <script type="application/ld+json">
+    <?= json_encode($activeSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
+  </script>
 
   <link href="<?= \App\Core\View::asset('img/favicon.png') ?>" rel="shortcut icon" type="image/x-icon" />
 
@@ -39,7 +65,7 @@
 <body>
   <!-- Promo Announcement Strip -->
   <div class="top_offer_bar py-2 text-center text-white" style="background-color: #0b5341; font-size: 14px; font-weight: 500;">
-    Starting at ₹999 • Save up to 25% on your first booking
+    <?= \App\Core\View::e(\App\Models\Setting::get('promo_strip_text', 'Starting at ₹999 • Save up to 25% on your first booking')) ?>
   </div>
 
   <!-- Header Navigation -->

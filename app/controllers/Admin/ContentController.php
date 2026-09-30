@@ -242,4 +242,66 @@ class ContentController extends Controller
 
         return $this->redirect('/admin/content/steps');
     }
+
+    // ==========================================
+    // CHECKLISTS (Inclusions / Exclusions)
+    // ==========================================
+    public function checklists(Request $request): Response
+    {
+        $serviceId = (int)$request->query('service_id', 0);
+        $services = Service::all('name ASC');
+
+        $where = $serviceId > 0 ? "WHERE c.service_id = :sid" : "";
+        $params = $serviceId > 0 ? ['sid' => $serviceId] : [];
+
+        $items = Database::fetchAll(
+            "SELECT c.*, s.name as service_name
+             FROM service_checklist_items c
+             JOIN services s ON c.service_id = s.id
+             {$where}
+             ORDER BY s.name ASC, c.is_included DESC, c.sort_order ASC",
+            $params
+        );
+
+        return $this->render('admin.content.checklists', [
+            'title'            => 'Service Checklists | Primodomus Admin',
+            'items'            => $items,
+            'services'         => $services,
+            'currentServiceId' => $serviceId,
+        ], 'admin');
+    }
+
+    public function storeChecklist(Request $request): Response
+    {
+        $serviceId = (int)$request->input('service_id');
+        $label = trim((string)$request->input('label'));
+        $isIncluded = (int)$request->input('is_included', 1);
+        $sortOrder = (int)$request->input('sort_order', 0);
+
+        if ($serviceId <= 0 || empty($label)) {
+            View::setFlash('error', 'Service and checklist item label are required.');
+            return $this->redirect('/admin/content/checklists');
+        }
+
+        Database::query(
+            "INSERT INTO service_checklist_items (service_id, label, is_included, sort_order)
+             VALUES (:sid, :label, :inc, :sort)",
+            [
+                'sid'   => $serviceId,
+                'label' => $label,
+                'inc'   => $isIncluded,
+                'sort'  => $sortOrder,
+            ]
+        );
+
+        View::setFlash('success', 'Checklist item added successfully.');
+        return $this->redirect('/admin/content/checklists?service_id=' . $serviceId);
+    }
+
+    public function deleteChecklist(Request $request, string $id): Response
+    {
+        Database::query("DELETE FROM service_checklist_items WHERE id = :id", ['id' => $id]);
+        View::setFlash('success', 'Checklist item deleted.');
+        return $this->redirect('/admin/content/checklists');
+    }
 }

@@ -58,6 +58,24 @@ class Response
         return $response;
     }
 
+    public static function xml(string $xml, int $status = 200): self
+    {
+        $response = new self();
+        $response->setStatusCode($status);
+        $response->setHeader('Content-Type', 'application/xml; charset=utf-8');
+        $response->setContent($xml);
+        return $response;
+    }
+
+    public static function plain(string $text, int $status = 200): self
+    {
+        $response = new self();
+        $response->setStatusCode($status);
+        $response->setHeader('Content-Type', 'text/plain; charset=utf-8');
+        $response->setContent($text);
+        return $response;
+    }
+
     public static function html(string $content, int $status = 200): self
     {
         $response = new self();

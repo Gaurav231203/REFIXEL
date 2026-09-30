@@ -57,10 +57,10 @@
   <!-- Trust Numbers -->
   <div class="complate_serv p-4 rounded mb-5" style="background:#f7fbf9; border: 1px solid #dcece7;">
     <ul class="d-flex justify-content-around flex-wrap mb-0 p-0" style="list-style:none;">
-      <li class="text-center p-2"><span style="font-size:32px; font-weight:700; color:#0f6e56;">4.8★</span> <h6 class="text-muted mt-1">Rated by 1000+ Customers</h6></li>
-      <li class="text-center p-2"><span style="font-size:32px; font-weight:700; color:#0f6e56;">5000+</span> <h6 class="text-muted mt-1">Homes Cleaned</h6></li>
-      <li class="text-center p-2"><span style="font-size:32px; font-weight:700; color:#0f6e56;">60+</span> <h6 class="text-muted mt-1">Service Partners</h6></li>
-      <li class="text-center p-2"><span style="font-size:32px; font-weight:700; color:#0f6e56;">9+</span> <h6 class="text-muted mt-1">Major Metro Cities</h6></li>
+      <li class="text-center p-2"><span style="font-size:32px; font-weight:700; color:#0f6e56;"><?= \App\Core\View::e(\App\Models\Setting::get('stat_rating', '4.8★')) ?></span> <h6 class="text-muted mt-1"><?= \App\Core\View::e(\App\Models\Setting::get('stat_rating_note', 'Rated by 1000+ Customers')) ?></h6></li>
+      <li class="text-center p-2"><span style="font-size:32px; font-weight:700; color:#0f6e56;"><?= \App\Core\View::e(\App\Models\Setting::get('stat_homes_cleaned', '5000+')) ?></span> <h6 class="text-muted mt-1"><?= \App\Core\View::e(\App\Models\Setting::get('stat_homes_note', 'Homes Cleaned')) ?></h6></li>
+      <li class="text-center p-2"><span style="font-size:32px; font-weight:700; color:#0f6e56;"><?= \App\Core\View::e(\App\Models\Setting::get('stat_service_partners', '60+')) ?></span> <h6 class="text-muted mt-1"><?= \App\Core\View::e(\App\Models\Setting::get('stat_partners_note', 'Service Partners')) ?></h6></li>
+      <li class="text-center p-2"><span style="font-size:32px; font-weight:700; color:#0f6e56;"><?= \App\Core\View::e(\App\Models\Setting::get('stat_verified_pros', '400+')) ?></span> <h6 class="text-muted mt-1"><?= \App\Core\View::e(\App\Models\Setting::get('stat_pros_note', 'Verified Professionals')) ?></h6></li>
     </ul>
   </div>
 </div>

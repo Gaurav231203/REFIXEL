@@ -111,6 +111,9 @@
         <li class="<?= str_contains($uri, '/admin/content/steps') ? 'active' : '' ?>">
           <a href="<?= \App\Core\View::url('/admin/content/steps') ?>"><i class="fa fa-list-ol"></i> Process Steps</a>
         </li>
+        <li class="<?= str_contains($uri, '/admin/content/checklists') ? 'active' : '' ?>">
+          <a href="<?= \App\Core\View::url('/admin/content/checklists') ?>"><i class="fa fa-check-square-o"></i> Service Checklists</a>
+        </li>
         <li class="<?= str_contains($uri, '/admin/settings') ? 'active' : '' ?>">
           <a href="<?= \App\Core\View::url('/admin/settings') ?>"><i class="fa fa-cog"></i> Business Settings</a>
         </li>

@@ -34,6 +34,9 @@ Router::get('/blog.php', 'PageController@blog');
 
 Router::get('/services', 'ServiceController@index');
 
+Router::get('/sitemap.xml', 'PageController@sitemap');
+Router::get('/robots.txt', 'PageController@robots');
+
 
 // Clean SEO URLs for categories and services
 Router::get('/{category}-services-in-{city}', 'ServiceController@categoryInCity');
@@ -159,6 +162,10 @@ Router::group(['middleware' => ['RequireRole:admin']], function () {
 
     Router::get('/admin/content/steps', 'Admin\\ContentController@steps');
     Router::post('/admin/content/steps/{id}', 'Admin\\ContentController@updateStep', ['VerifyCsrf']);
+
+    Router::get('/admin/content/checklists', 'Admin\\ContentController@checklists');
+    Router::post('/admin/content/checklists', 'Admin\\ContentController@storeChecklist', ['VerifyCsrf']);
+    Router::post('/admin/content/checklists/{id}/delete', 'Admin\\ContentController@deleteChecklist', ['VerifyCsrf']);
 
     // Settings
     Router::get('/admin/settings', 'Admin\\SettingsController@index');

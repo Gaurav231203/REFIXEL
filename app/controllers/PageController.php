@@ -53,5 +53,87 @@ class PageController extends Controller
     {
         return $this->render('customer.blog', ['title' => 'Blog & Home Guides | Primodomus'], 'customer');
     }
+
+    public function sitemap(Request $request): Response
+    {
+        $baseUrl = rtrim((string)\App\Core\Env::get('APP_URL', 'https://www.primodomus.com'), '/');
+        $today = date('Y-m-d');
+
+        $urls = [
+            ['loc' => $baseUrl . '/', 'priority' => '1.0', 'changefreq' => 'daily'],
+            ['loc' => $baseUrl . '/about', 'priority' => '0.8', 'changefreq' => 'weekly'],
+            ['loc' => $baseUrl . '/faq', 'priority' => '0.8', 'changefreq' => 'weekly'],
+            ['loc' => $baseUrl . '/gallery', 'priority' => '0.8', 'changefreq' => 'weekly'],
+            ['loc' => $baseUrl . '/contact', 'priority' => '0.8', 'changefreq' => 'weekly'],
+            ['loc' => $baseUrl . '/services', 'priority' => '0.9', 'changefreq' => 'weekly'],
+            ['loc' => $baseUrl . '/terms', 'priority' => '0.5', 'changefreq' => 'monthly'],
+            ['loc' => $baseUrl . '/privacy', 'priority' => '0.5', 'changefreq' => 'monthly'],
+            ['loc' => $baseUrl . '/refund', 'priority' => '0.5', 'changefreq' => 'monthly'],
+        ];
+
+        // Active Cities
+        $cities = ServiceArea::getActiveCities();
+        $categories = \App\Models\Category::all('sort_order ASC');
+        $services = \App\Models\Service::all('name ASC');
+
+        foreach ($cities as $c) {
+            $citySlug = strtolower(trim((string)$c['city']));
+            if (empty($citySlug)) continue;
+
+            // Categories in City
+            foreach ($categories as $cat) {
+                if (empty($cat['is_active'])) continue;
+                $catSlug = $cat['slug'] ?? strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $cat['name']), '-'));
+                $urls[] = [
+                    'loc'        => "{$baseUrl}/{$catSlug}-services-in-{$citySlug}",
+                    'priority'   => '0.9',
+                    'changefreq' => 'weekly',
+                ];
+            }
+
+            // Services in City
+            foreach ($services as $svc) {
+                if (empty($svc['is_active'])) continue;
+                $svcSlug = $svc['slug'] ?? strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $svc['name']), '-'));
+                $urls[] = [
+                    'loc'        => "{$baseUrl}/{$svcSlug}-services-in-{$citySlug}",
+                    'priority'   => '0.9',
+                    'changefreq' => 'weekly',
+                ];
+            }
+        }
+
+        $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        $xml .= "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n";
+        foreach ($urls as $u) {
+            $xml .= "  <url>\n";
+            $xml .= "    <loc>" . htmlspecialchars($u['loc'], ENT_XML1) . "</loc>\n";
+            $xml .= "    <lastmod>{$today}</lastmod>\n";
+            $xml .= "    <changefreq>{$u['changefreq']}</changefreq>\n";
+            $xml .= "    <priority>{$u['priority']}</priority>\n";
+            $xml .= "  </url>\n";
+        }
+        $xml .= "</urlset>";
+
+        return Response::xml($xml);
+    }
+
+    public function robots(Request $request): Response
+    {
+        $baseUrl = rtrim((string)\App\Core\Env::get('APP_URL', 'https://www.primodomus.com'), '/');
+
+        $content = "User-agent: *\n";
+        $content .= "Disallow: /admin\n";
+        $content .= "Disallow: /admin/\n";
+        $content .= "Disallow: /staff\n";
+        $content .= "Disallow: /staff/\n";
+        $content .= "Disallow: /account\n";
+        $content .= "Disallow: /account/\n";
+        $content .= "Disallow: /api/\n";
+        $content .= "Allow: /\n\n";
+        $content .= "Sitemap: {$baseUrl}/sitemap.xml\n";
+
+        return Response::plain($content);
+    }
 }
 
