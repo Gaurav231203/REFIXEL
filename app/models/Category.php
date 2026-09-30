@@ -18,4 +18,13 @@ class Category extends Model
     {
         return Database::fetchOne("SELECT * FROM categories WHERE slug = :slug AND is_active = 1 LIMIT 1", ['slug' => $slug]);
     }
+
+    public static function getRelated(int $currentCategoryId, int $limit = 4): array
+    {
+        return Database::fetchAll(
+            "SELECT * FROM categories WHERE id != :cid AND is_active = 1 ORDER BY sort_order ASC LIMIT {$limit}",
+            ['cid' => $currentCategoryId]
+        );
+    }
 }
+

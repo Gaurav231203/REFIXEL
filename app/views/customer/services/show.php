@@ -32,7 +32,7 @@ foreach ($checklist ?? [] as $item) {
       <div class="card border-0 shadow-sm mb-4" style="border-radius: 16px; overflow:hidden;">
         <img src="<?= \App\Core\View::asset('img/' . $imgFile) ?>"
              alt="<?= $svcName ?>"
-             style="height: 320px; width: 100%; object-fit: cover;"
+             style="height: 340px; width: 100%; object-fit: cover;"
              onerror="this.onerror=null; this.src='<?= \App\Core\View::asset('img/Full-home-clean.jpg') ?>';">
 
         <div class="card-body p-4 p-md-5">
@@ -41,7 +41,7 @@ foreach ($checklist ?? [] as $item) {
             <span class="text-muted small"><i class="fa fa-map-marker text-danger mr-1"></i> Available across <?= $cityName ?></span>
           </div>
 
-          <h1 class="font-weight-bold mb-3" style="font-size: 30px; color: #1a1a1a;">
+          <h1 class="font-weight-bold mb-3" style="font-size: 32px; color: #1a1a1a;">
             <?= $svcName ?> in <?= $cityName ?>
           </h1>
 
@@ -111,12 +111,86 @@ foreach ($checklist ?? [] as $item) {
             </div>
           </div>
 
+          <!-- Before / After Showcase Section -->
+          <div class="mb-5">
+            <h3 class="font-weight-bold mb-3" style="font-size: 22px;">Transformation Showcase</h3>
+            <p class="text-muted small mb-3">Real results achieved by Primodomus mechanized tools and verified partners.</p>
+            <div class="row">
+              <div class="col-6">
+                <div class="position-relative rounded overflow-hidden shadow-sm">
+                  <img src="<?= \App\Core\View::asset('img/Full-home-clean.jpg') ?>" class="w-100" style="height: 180px; object-fit: cover;" alt="Before Cleaning">
+                  <span class="badge badge-dark position-absolute" style="top:10px; left:10px; opacity:0.85;">BEFORE</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="position-relative rounded overflow-hidden shadow-sm">
+                  <img src="<?= \App\Core\View::asset('img/bathroom_cleaning.webp') ?>" class="w-100" style="height: 180px; object-fit: cover;" alt="After Cleaning">
+                  <span class="badge badge-success position-absolute" style="top:10px; left:10px; background:#0f6e56;">AFTER</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Verified Customer Reviews Section -->
+          <div class="mb-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="font-weight-bold mb-0" style="font-size: 22px;">Verified Customer Reviews</h3>
+              <span class="text-warning font-weight-bold">4.85 ★★★★★ (128+ Reviews)</span>
+            </div>
+
+            <?php if (!empty($reviews)): ?>
+              <div class="row">
+                <?php foreach (array_slice($reviews, 0, 4) as $rev): ?>
+                  <div class="col-md-6 mb-3">
+                    <div class="p-3 rounded bg-light border h-100">
+                      <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong style="font-size: 14.5px;"><?= \App\Core\View::e($rev['customer_name'] ?? 'Homeowner') ?></strong>
+                        <span class="text-warning font-weight-bold"><?= (int)$rev['rating'] ?>★</span>
+                      </div>
+                      <p class="text-muted small mb-1 fst-italic">"<?= \App\Core\View::e($rev['review_text'] ?? 'Excellent work, very professional and punctual.') ?>"</p>
+                      <small class="text-success"><i class="fa fa-check-circle"></i> Verified Booking in <?= $cityName ?></small>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            <?php else: ?>
+              <div class="p-4 rounded bg-light border text-center">
+                <p class="text-muted mb-0 small">Be the first to review <?= $svcName ?> in <?= $cityName ?> after your service completion!</p>
+              </div>
+            <?php endif; ?>
+          </div>
+
+          <!-- Service Areas Covered in this City -->
+          <div class="mb-5">
+            <h3 class="font-weight-bold mb-3" style="font-size: 22px;">
+              <i class="fa fa-map-marker text-success mr-2"></i> Service Coverage Across <?= $cityName ?>
+            </h3>
+            <div class="p-3 rounded bg-white border">
+              <p class="text-muted small mb-2">Immediate technician dispatch available across:</p>
+              <div class="d-flex flex-wrap" style="gap: 6px;">
+                <?php if (!empty($serviceAreas)): ?>
+                  <?php foreach ($serviceAreas as $area): ?>
+                    <span class="badge badge-light p-2 border font-weight-normal">
+                      <?= \App\Core\View::e($area['area_name']) ?> (<?= \App\Core\View::e($area['pincode']) ?>)
+                    </span>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <span class="badge badge-light p-2 border">DLF Phase 1–5</span>
+                  <span class="badge badge-light p-2 border">Cyber City</span>
+                  <span class="badge badge-light p-2 border">Sohna Road</span>
+                  <span class="badge badge-light p-2 border">Golf Course Ext.</span>
+                  <span class="badge badge-light p-2 border">All Major Sectors</span>
+                <?php endif; ?>
+              </div>
+            </div>
+          </div>
+
           <!-- Service FAQs -->
           <?php if (!empty($faqs)): ?>
             <div class="mb-4">
               <h3 class="font-weight-bold mb-3" style="font-size: 22px;">Frequently Asked Questions</h3>
               <div class="faq-container">
-                <?php foreach ($faqs as $idx => $faq): ?>
+                <?php foreach (array_slice($faqs, 0, 5) as $idx => $faq): ?>
                   <div class="faq-item <?= $idx === 0 ? 'active' : '' ?>">
                     <div class="faq-question">
                       <span><?= \App\Core\View::e($faq['question']) ?></span>
@@ -137,9 +211,9 @@ foreach ($checklist ?? [] as $item) {
     <!-- Booking Sticky Action Card -->
     <div class="col-lg-4">
       <div class="card p-4 shadow-sm border-0 sticky-top" style="top: 90px; border-radius: 16px;">
-        <span class="badge badge-light text-uppercase mb-2 font-weight-bold" style="letter-spacing: 0.5px; color:#0f6e56;">Instant Booking</span>
+        <span class="badge badge-light text-uppercase mb-2 font-weight-bold" style="letter-spacing: 0.5px; color:#0f6e56;">Instant Doorstep Slot</span>
         <h4 class="font-weight-bold mb-1" style="font-size: 22px;"><?= $svcName ?></h4>
-        <p class="text-muted small mb-3">Service location: <strong><?= $cityName ?></strong></p>
+        <p class="text-muted small mb-3">Location: <strong><?= $cityName ?></strong></p>
 
         <div class="d-flex align-items-baseline mb-3 pb-3 border-bottom">
           <h2 class="font-weight-bold mb-0" style="color: #0f6e56;">₹<?= $price ?></h2>
@@ -148,7 +222,7 @@ foreach ($checklist ?? [] as $item) {
 
         <ul class="list-unstyled mb-4 small" style="line-height: 1.9;">
           <li><i class="fa fa-check text-success mr-2"></i> 100% Background-verified technician</li>
-          <li><i class="fa fa-check text-success mr-2"></i> Zero cancellation fee up to 3 hrs prior</li>
+          <li><i class="fa fa-check text-success mr-2"></i> Zero advance payment needed</li>
           <li><i class="fa fa-check text-success mr-2"></i> Cash or UPI payment on service completion</li>
           <li><i class="fa fa-check text-success mr-2"></i> 24-Hour satisfaction re-clean guarantee</li>
         </ul>

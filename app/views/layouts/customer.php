@@ -8,12 +8,20 @@
   <meta name="description" content="<?= \App\Core\View::e($description ?? 'Primodomus provides professional home and commercial cleaning services, including deep cleaning, painting, plumbing, pest control and trusted maintenance solutions. Book Now!') ?>">
   <meta name="author" content="primodomus">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="<?= \App\Core\View::url() ?>">
+  <link rel="canonical" href="<?= \App\Core\View::e($canonicalUrl ?? \App\Core\View::url($_SERVER['REQUEST_URI'] ?? '/')) ?>">
 
   <meta property="og:title" content="<?= \App\Core\View::e($title ?? 'Professional Home & Commercial Services | Primodomus') ?>">
-  <meta property="og:description" content="Primodomus provides professional home and commercial cleaning services. Book Now!">
-  <meta property="og:image" content="<?= \App\Core\View::asset('img/logo.svg') ?>">
-  <meta property="og:type" content="Website">
+  <meta property="og:description" content="<?= \App\Core\View::e($description ?? 'Primodomus provides professional home and commercial cleaning services. Book Now!') ?>">
+  <meta property="og:image" content="<?= \App\Core\View::e($ogImage ?? \App\Core\View::asset('img/logo.svg')) ?>">
+  <meta property="og:url" content="<?= \App\Core\View::e($canonicalUrl ?? \App\Core\View::url($_SERVER['REQUEST_URI'] ?? '/')) ?>">
+  <meta property="og:type" content="website">
+
+  <?php if (!empty($schemaData)): ?>
+    <script type="application/ld+json">
+      <?= json_encode($schemaData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?>
+    </script>
+  <?php endif; ?>
+
 
   <link href="<?= \App\Core\View::asset('img/favicon.png') ?>" rel="shortcut icon" type="image/x-icon" />
 
