@@ -23,4 +23,14 @@ class Setting extends Model
             ['k' => $key, 'v' => $value, 'v2' => $value]
         );
     }
+
+    public static function getAllKeyValue(): array
+    {
+        $rows = Database::fetchAll("SELECT setting_key, setting_value FROM settings");
+        $map = [];
+        foreach ($rows as $r) {
+            $map[$r['setting_key']] = $r['setting_value'];
+        }
+        return $map;
+    }
 }

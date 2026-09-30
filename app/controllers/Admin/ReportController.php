@@ -14,11 +14,17 @@ class ReportController extends Controller
     {
         $summary = Report::getAdminSummary();
         $chartData = Report::getMonthlyRevenueChartData();
+        $statusDist = Report::getJobStatusDistribution();
+        $topServices = Report::getTopServices(8);
+        $staffLeaderboard = Report::getStaffLeaderboard(8);
 
         return $this->render('admin.reports.index', [
-            'title'     => 'Analytics & Reports | Primodomus Admin',
-            'summary'   => $summary,
-            'chartData' => $chartData,
+            'title'            => 'Analytics & Reports | Primodomus Admin',
+            'summary'          => $summary,
+            'chartData'        => $chartData,
+            'statusDist'       => $statusDist,
+            'topServices'      => $topServices,
+            'staffLeaderboard' => $staffLeaderboard,
         ], 'admin');
     }
 }

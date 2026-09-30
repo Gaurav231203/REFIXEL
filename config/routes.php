@@ -97,32 +97,64 @@ Router::group(['middleware' => ['RequireRole:admin']], function () {
     Router::get('/admin', 'Admin\\DashboardController@index');
     Router::get('/admin/dashboard', 'Admin\\DashboardController@index');
 
+    // Enquiries
     Router::get('/admin/enquiries', 'Admin\\EnquiryController@index');
     Router::get('/admin/enquiries/{id}', 'Admin\\EnquiryController@show');
+    Router::post('/admin/enquiries/{id}/update', 'Admin\\EnquiryController@update', ['VerifyCsrf']);
 
+    // Bookings & Dispatch Calendar
     Router::get('/admin/bookings', 'Admin\\BookingController@index');
     Router::get('/admin/bookings/{id}', 'Admin\\BookingController@show');
     Router::post('/admin/bookings/{id}/assign', 'Admin\\BookingController@assignStaff', ['VerifyCsrf']);
+    Router::post('/admin/bookings/{id}/reschedule', 'Admin\\BookingController@reschedule', ['VerifyCsrf']);
+    Router::post('/admin/bookings/{id}/status', 'Admin\\BookingController@updateStatus', ['VerifyCsrf']);
+    Router::get('/admin/calendar', 'Admin\\BookingController@calendar');
 
+    // Staff
     Router::get('/admin/staff', 'Admin\\StaffController@index');
     Router::get('/admin/staff/create', 'Admin\\StaffController@create');
     Router::post('/admin/staff', 'Admin\\StaffController@store', ['VerifyCsrf']);
     Router::get('/admin/staff/{id}', 'Admin\\StaffController@show');
+    Router::post('/admin/staff/{id}/toggle-status', 'Admin\\StaffController@toggleStatus', ['VerifyCsrf']);
+    Router::post('/admin/staff/{id}/skills', 'Admin\\StaffController@updateSkills', ['VerifyCsrf']);
 
+    // Services & Categories
     Router::get('/admin/services', 'Admin\\ServiceController@index');
+    Router::post('/admin/services', 'Admin\\ServiceController@storeService', ['VerifyCsrf']);
+    Router::post('/admin/services/{id}/toggle-status', 'Admin\\ServiceController@toggleServiceStatus', ['VerifyCsrf']);
     Router::get('/admin/services/categories', 'Admin\\ServiceController@categories');
+    Router::post('/admin/services/categories', 'Admin\\ServiceController@storeCategory', ['VerifyCsrf']);
+    Router::post('/admin/services/categories/{id}/toggle-status', 'Admin\\ServiceController@toggleCategoryStatus', ['VerifyCsrf']);
 
+    // Payments & Invoices
     Router::get('/admin/payments', 'Admin\\PaymentController@index');
     Router::post('/admin/payments', 'Admin\\PaymentController@recordPayment', ['VerifyCsrf']);
+    Router::get('/admin/invoices/{id}', 'Admin\\PaymentController@showInvoice');
 
+    // Reports & Analytics
     Router::get('/admin/reports', 'Admin\\ReportController@index');
 
+    // Content (CMS)
     Router::get('/admin/content/faqs', 'Admin\\ContentController@faqs');
-    Router::get('/admin/content/gallery', 'Admin\\ContentController@gallery');
-    Router::get('/admin/content/reviews', 'Admin\\ContentController@reviews');
-    Router::get('/admin/content/areas', 'Admin\\ContentController@areas');
-    Router::get('/admin/content/steps', 'Admin\\ContentController@steps');
+    Router::post('/admin/content/faqs', 'Admin\\ContentController@storeFaq', ['VerifyCsrf']);
+    Router::post('/admin/content/faqs/{id}/delete', 'Admin\\ContentController@deleteFaq', ['VerifyCsrf']);
 
+    Router::get('/admin/content/gallery', 'Admin\\ContentController@gallery');
+    Router::post('/admin/content/gallery', 'Admin\\ContentController@storeGallery', ['VerifyCsrf']);
+    Router::post('/admin/content/gallery/{id}/toggle', 'Admin\\ContentController@toggleGallery', ['VerifyCsrf']);
+
+    Router::get('/admin/content/reviews', 'Admin\\ContentController@reviews');
+    Router::post('/admin/content/reviews/{id}/approve', 'Admin\\ContentController@approveReview', ['VerifyCsrf']);
+    Router::post('/admin/content/reviews/{id}/delete', 'Admin\\ContentController@deleteReview', ['VerifyCsrf']);
+
+    Router::get('/admin/content/areas', 'Admin\\ContentController@areas');
+    Router::post('/admin/content/areas', 'Admin\\ContentController@storeArea', ['VerifyCsrf']);
+    Router::post('/admin/content/areas/{id}/toggle', 'Admin\\ContentController@toggleArea', ['VerifyCsrf']);
+
+    Router::get('/admin/content/steps', 'Admin\\ContentController@steps');
+    Router::post('/admin/content/steps/{id}', 'Admin\\ContentController@updateStep', ['VerifyCsrf']);
+
+    // Settings
     Router::get('/admin/settings', 'Admin\\SettingsController@index');
     Router::post('/admin/settings', 'Admin\\SettingsController@save', ['VerifyCsrf']);
 });

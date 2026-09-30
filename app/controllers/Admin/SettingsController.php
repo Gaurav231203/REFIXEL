@@ -13,8 +13,11 @@ class SettingsController extends Controller
 {
     public function index(Request $request): Response
     {
-        $settings = Setting::all();
-        return $this->render('admin.settings.index', ['title' => 'Business Settings | Primodomus Admin', 'settings' => $settings], 'admin');
+        $settings = Setting::getAllKeyValue();
+        return $this->render('admin.settings.index', [
+            'title'    => 'Business & Notification Settings | Primodomus Admin',
+            'settings' => $settings,
+        ], 'admin');
     }
 
     public function save(Request $request): Response
@@ -23,7 +26,7 @@ class SettingsController extends Controller
             if ($k === '_csrf') continue;
             Setting::set($k, (string)$v);
         }
-        View::setFlash('success', 'Settings updated successfully.');
+        View::setFlash('success', 'Business and notification settings updated successfully.');
         return $this->redirect('/admin/settings');
     }
 }
