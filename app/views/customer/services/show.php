@@ -1,0 +1,166 @@
+<?php
+$svcName = \App\Core\View::e($service['name']);
+$cityName = \App\Core\View::e($city);
+$price = number_format((float)$service['starting_price'], 0);
+$duration = (int)($service['duration_minutes'] ?? 60);
+$imgFile = $service['image'] ?? 'Full-home-clean.jpg';
+
+// Split checklist into included and excluded
+$includedItems = [];
+$excludedItems = [];
+foreach ($checklist ?? [] as $item) {
+    if (!empty($item['is_included'])) {
+        $includedItems[] = $item['label'];
+    } else {
+        $excludedItems[] = $item['label'];
+    }
+}
+?>
+<div class="container py-5 my-3">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb bg-transparent p-0 mb-4" style="font-size: 14px;">
+      <li class="breadcrumb-item"><a href="<?= \App\Core\View::url('/') ?>" style="color:#0f6e56;">Home</a></li>
+      <li class="breadcrumb-item"><a href="<?= \App\Core\View::url('/services') ?>" style="color:#0f6e56;">Services</a></li>
+      <li class="breadcrumb-item active" aria-current="page"><?= $svcName ?> in <?= $cityName ?></li>
+    </ol>
+  </nav>
+
+  <div class="row">
+    <!-- Main Service Information -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm mb-4" style="border-radius: 16px; overflow:hidden;">
+        <img src="<?= \App\Core\View::asset('img/' . $imgFile) ?>"
+             alt="<?= $svcName ?>"
+             style="height: 320px; width: 100%; object-fit: cover;"
+             onerror="this.onerror=null; this.src='<?= \App\Core\View::asset('img/Full-home-clean.jpg') ?>';">
+
+        <div class="card-body p-4 p-md-5">
+          <div class="d-flex align-items-center mb-2">
+            <span class="badge badge-success mr-2" style="background:#0f6e56;">Verified Service</span>
+            <span class="text-muted small"><i class="fa fa-map-marker text-danger mr-1"></i> Available across <?= $cityName ?></span>
+          </div>
+
+          <h1 class="font-weight-bold mb-3" style="font-size: 30px; color: #1a1a1a;">
+            <?= $svcName ?> in <?= $cityName ?>
+          </h1>
+
+          <p class="text-muted lead mb-4" style="font-size: 16px; line-height: 1.7;">
+            <?= \App\Core\View::e($service['description'] ?? 'Top-rated professional service with industrial grade equipment and verified specialists.') ?>
+          </p>
+
+          <!-- Highlights strip -->
+          <div class="row py-3 mb-4 rounded bg-light border">
+            <div class="col-4 text-center border-right">
+              <span class="text-muted small d-block">Starting Price</span>
+              <h4 class="font-weight-bold mb-0" style="color: #0f6e56;">₹<?= $price ?></h4>
+            </div>
+            <div class="col-4 text-center border-right">
+              <span class="text-muted small d-block">Duration</span>
+              <h4 class="font-weight-bold mb-0">~<?= $duration ?> mins</h4>
+            </div>
+            <div class="col-4 text-center">
+              <span class="text-muted small d-block">Customer Rating</span>
+              <h4 class="font-weight-bold mb-0" style="color: #f59e0b;">4.85 ★</h4>
+            </div>
+          </div>
+
+          <!-- What's Included & What's Excluded Checklist -->
+          <div class="mb-5">
+            <h3 class="font-weight-bold mb-3" style="font-size: 22px;">Multi-Point Hygiene Checklist</h3>
+            <p class="text-muted small mb-4">Every technician is required to complete and photograph each task before generating your invoice.</p>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <div class="p-3 rounded h-100" style="background: #f0fdf4; border: 1px solid #bbf7d0;">
+                  <h5 class="font-weight-bold text-success mb-3" style="font-size: 16px;">
+                    <i class="fa fa-check-circle mr-1"></i> What's Included
+                  </h5>
+                  <ul class="list-unstyled mb-0" style="font-size: 14px; line-height: 1.8;">
+                    <?php if (!empty($includedItems)): ?>
+                      <?php foreach ($includedItems as $item): ?>
+                        <li class="mb-2"><i class="fa fa-check text-success mr-2"></i> <?= \App\Core\View::e($item) ?></li>
+                      <?php endforeach; ?>
+                    <?php else: ?>
+                      <li class="mb-2"><i class="fa fa-check text-success mr-2"></i> Mechanized high-pressure deep cleaning and scrubbing</li>
+                      <li class="mb-2"><i class="fa fa-check text-success mr-2"></i> Surface descaling, degreasing, and dust vacuuming</li>
+                      <li class="mb-2"><i class="fa fa-check text-success mr-2"></i> Eco-friendly antibacterial sanitization spray</li>
+                    <?php endif; ?>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="p-3 rounded h-100" style="background: #fef2f2; border: 1px solid #fecaca;">
+                  <h5 class="font-weight-bold text-danger mb-3" style="font-size: 16px;">
+                    <i class="fa fa-times-circle mr-1"></i> What's Excluded
+                  </h5>
+                  <ul class="list-unstyled mb-0" style="font-size: 14px; line-height: 1.8;">
+                    <?php if (!empty($excludedItems)): ?>
+                      <?php foreach ($excludedItems as $item): ?>
+                        <li class="mb-2"><i class="fa fa-times text-danger mr-2"></i> <?= \App\Core\View::e($item) ?></li>
+                      <?php endforeach; ?>
+                    <?php else: ?>
+                      <li class="mb-2"><i class="fa fa-times text-danger mr-2"></i> Moving heavy structural furniture (>40kg) without assistance</li>
+                      <li class="mb-2"><i class="fa fa-times text-danger mr-2"></i> Civil masonry repair, structural wall replastering</li>
+                      <li class="mb-2"><i class="fa fa-times text-danger mr-2"></i> Replacement of broken hardware components</li>
+                    <?php endif; ?>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Service FAQs -->
+          <?php if (!empty($faqs)): ?>
+            <div class="mb-4">
+              <h3 class="font-weight-bold mb-3" style="font-size: 22px;">Frequently Asked Questions</h3>
+              <div class="faq-container">
+                <?php foreach ($faqs as $idx => $faq): ?>
+                  <div class="faq-item <?= $idx === 0 ? 'active' : '' ?>">
+                    <div class="faq-question">
+                      <span><?= \App\Core\View::e($faq['question']) ?></span>
+                      <div class="faq-icon"><?= $idx === 0 ? '−' : '+' ?></div>
+                    </div>
+                    <div class="faq-answer" style="<?= $idx === 0 ? 'display:block;' : 'display:none;' ?>">
+                      <?= nl2br(\App\Core\View::e($faq['answer'])) ?>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            </div>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Sticky Action Card -->
+    <div class="col-lg-4">
+      <div class="card p-4 shadow-sm border-0 sticky-top" style="top: 90px; border-radius: 16px;">
+        <span class="badge badge-light text-uppercase mb-2 font-weight-bold" style="letter-spacing: 0.5px; color:#0f6e56;">Instant Booking</span>
+        <h4 class="font-weight-bold mb-1" style="font-size: 22px;"><?= $svcName ?></h4>
+        <p class="text-muted small mb-3">Service location: <strong><?= $cityName ?></strong></p>
+
+        <div class="d-flex align-items-baseline mb-3 pb-3 border-bottom">
+          <h2 class="font-weight-bold mb-0" style="color: #0f6e56;">₹<?= $price ?></h2>
+          <span class="text-muted ml-2 small">Starting price • Inclusive of GST</span>
+        </div>
+
+        <ul class="list-unstyled mb-4 small" style="line-height: 1.9;">
+          <li><i class="fa fa-check text-success mr-2"></i> 100% Background-verified technician</li>
+          <li><i class="fa fa-check text-success mr-2"></i> Zero cancellation fee up to 3 hrs prior</li>
+          <li><i class="fa fa-check text-success mr-2"></i> Cash or UPI payment on service completion</li>
+          <li><i class="fa fa-check text-success mr-2"></i> 24-Hour satisfaction re-clean guarantee</li>
+        </ul>
+
+        <a href="<?= \App\Core\View::url('/book?service_id=' . (int)$service['id'] . '&city=' . urlencode($city)) ?>" class="btn text-white py-3 font-weight-bold text-center w-100 mb-2" style="background:#0f6e56; border-radius: 8px; font-size: 16px;">
+          Book Doorstep Visit
+        </a>
+
+        <a href="https://api.whatsapp.com/send?phone=+919953358855&text=Hi%20Primodomus%2C%20I%20would%20like%20to%20book%20<?= urlencode($service['name']) ?>%20in%20<?= urlencode($city) ?>" target="_blank" class="btn btn-outline-success py-2 font-weight-bold text-center w-100 small" style="border-radius: 8px;">
+          <i class="fa fa-whatsapp mr-1"></i> Quick Book via WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

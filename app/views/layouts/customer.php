@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?= \App\Core\View::e($title ?? 'Professional Home and Commercial Services | Primodomus') ?></title>
+  <meta name="keywords" content="home cleaning services, commercial cleaning services, office cleaning services, professional cleaning company, primodomus" />
+  <meta name="description" content="<?= \App\Core\View::e($description ?? 'Primodomus provides professional home and commercial cleaning services, including deep cleaning, painting, plumbing, pest control and trusted maintenance solutions. Book Now!') ?>">
+  <meta name="author" content="primodomus">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="<?= \App\Core\View::url() ?>">
+
+  <meta property="og:title" content="<?= \App\Core\View::e($title ?? 'Professional Home & Commercial Services | Primodomus') ?>">
+  <meta property="og:description" content="Primodomus provides professional home and commercial cleaning services. Book Now!">
+  <meta property="og:image" content="<?= \App\Core\View::asset('img/logo.svg') ?>">
+  <meta property="og:type" content="Website">
+
+  <link href="<?= \App\Core\View::asset('img/favicon.png') ?>" rel="shortcut icon" type="image/x-icon" />
+
+  <!-- Fonts & Libraries -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+  <!-- Primodomus Live Visual Stylesheets -->
+  <link rel="stylesheet" href="<?= \App\Core\View::asset('css/style.css') ?>" />
+  <link rel="stylesheet" href="<?= \App\Core\View::asset('css/page-style.css') ?>" />
+</head>
+<body>
+  <!-- Promo Announcement Strip -->
+  <div class="top_offer_bar py-2 text-center text-white" style="background-color: #0b5341; font-size: 14px; font-weight: 500;">
+    Starting at ₹999 • Save up to 25% on your first booking
+  </div>
+
+  <!-- Header Navigation -->
+  <?= \App\Core\View::partial('navbar') ?>
+
+  <!-- Shared Modals & Drawers -->
+  <?= \App\Core\View::partial('location-modal') ?>
+  <?= \App\Core\View::partial('login-modal') ?>
+  <?= \App\Core\View::partial('mobile-drawer') ?>
+  <?= \App\Core\View::partial('flash') ?>
+
+  <main id="mainContent">
+    <?= $content ?? '' ?>
+  </main>
+
+  <!-- Footer & Bottom Mobile Thumb Navigation -->
+  <?= \App\Core\View::partial('footer') ?>
+  <?= \App\Core\View::partial('mobile-bar') ?>
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+  <!-- Global Primodomus Interactive Script -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var baseUrl = '<?= rtrim(\App\Core\View::url(), '/') ?>';
+
+    // 1. Mobile Drawer Toggle
+    var mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    var mobileDrawer = document.querySelector(".hometfn_popup");
+    var closeDrawerBtn = document.querySelector(".btnclose_tfn");
+
+    if (mobileMenuBtn && mobileDrawer) {
+      mobileMenuBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        mobileDrawer.classList.add("show");
+      });
+    }
+    if (closeDrawerBtn && mobileDrawer) {
+      closeDrawerBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        mobileDrawer.classList.remove("show");
+      });
+    }
+
+    // 2. Header Login Trigger Modal
+    var hdrLoginTrigger = document.getElementById("hdrLoginTrigger");
+    var hdrLoginPopup = document.getElementById("hdrLoginPopup");
+    var hdrCloseLoginPopup = document.getElementById("hdrCloseLoginPopup");
+
+    window.openLoginModal = function() {
+      if (hdrLoginPopup) hdrLoginPopup.style.display = "flex";
+    };
+
+    if (hdrLoginTrigger && hdrLoginPopup) {
+      hdrLoginTrigger.addEventListener("click", function(e) {
+        e.preventDefault();
+        hdrLoginPopup.style.display = "flex";
+      });
+    }
+    if (hdrCloseLoginPopup && hdrLoginPopup) {
+      hdrCloseLoginPopup.addEventListener("click", function() {
+        hdrLoginPopup.style.display = "none";
+      });
+    }
+
+    // 3. Location Modal Toggle & City Selection
+    var locModal = document.getElementById("popupmodal_gate");
+    var locBtn = document.getElementById("headerChangeCityBtn");
+    var locClose = document.getElementById("locGateCloseBtn");
+    var locManualBtn = document.getElementById("locGateManualBtn");
+    var locBackBtn = document.getElementById("locGateBackBtn");
+    var locChoiceStep = document.getElementById("locGateChoiceStep");
+    var locManualStep = document.getElementById("locGateManualStep");
+
+    if (locBtn && locModal) {
+      locBtn.addEventListener("click", function() {
+        locModal.style.display = "flex";
+        if (locChoiceStep) locChoiceStep.style.display = "block";
+        if (locManualStep) locManualStep.style.display = "none";
+      });
+    }
+    if (locClose && locModal) {
+      locClose.addEventListener("click", function() {
+        locModal.style.display = "none";
+      });
+    }
+    if (locManualBtn && locChoiceStep && locManualStep) {
+      locManualBtn.addEventListener("click", function() {
+        locChoiceStep.style.display = "none";
+        locManualStep.style.display = "block";
+      });
+    }
+    if (locBackBtn && locChoiceStep && locManualStep) {
+      locBackBtn.addEventListener("click", function() {
+        locManualStep.style.display = "none";
+        locChoiceStep.style.display = "block";
+      });
+    }
+
+    // City Selection Buttons
+    document.querySelectorAll(".select-city-btn").forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        var city = this.getAttribute("data-city");
+        if (city) {
+          fetch(baseUrl + '/api/service-areas', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({city: city})
+          }).then(function() {
+            window.location.reload();
+          }).catch(function() {
+            window.location.reload();
+          });
+        }
+      });
+    });
+  });
+  </script>
+</body>
+</html>

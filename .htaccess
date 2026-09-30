@@ -1,0 +1,18 @@
+# Block sensitive folders and files from being directly browsed
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Prevent direct access to hidden files and system directories
+    RewriteRule ^\.env - [F,L]
+    RewriteRule ^(app|config|database|cron|storage|tests|docs)/ - [F,L]
+
+    # Redirect/Rewrite root traffic to public/
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Fallback directory protection
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>

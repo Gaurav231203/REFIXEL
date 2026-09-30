@@ -1,0 +1,14 @@
+/.env
+/vendor/
+/storage/logs/*.log
+/storage/cache/*
+/public/uploads/issues/*
+/public/uploads/jobs/*
+/public/uploads/gallery/*
+!/public/uploads/issues/.htaccess
+!/public/uploads/jobs/.htaccess
+!/public/uploads/gallery/.htaccess
+!/public/uploads/.htaccess
+/scratch/
+.DS_Store
+Thumbs.db
