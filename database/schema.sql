@@ -54,8 +54,12 @@ CREATE TABLE users (
 CREATE TABLE customer_profiles (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL UNIQUE,
+    house_no VARCHAR(100) NULL,
+    street VARCHAR(255) NULL,
     address VARCHAR(255) NULL,
     city VARCHAR(80) NULL,
+    state VARCHAR(100) NULL,
+    address_type VARCHAR(50) DEFAULT 'Home',
     pincode VARCHAR(10) NULL,
     lat DECIMAL(10,8) NULL,
     lng DECIMAL(11,8) NULL,

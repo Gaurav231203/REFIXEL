@@ -51,6 +51,16 @@ class Database
         return $stmt;
     }
 
+    public static function execute(string $sql, array $params = [], bool $returnLastId = false): mixed
+    {
+        $stmt = self::query($sql, $params);
+        if ($returnLastId) {
+            $lastId = self::lastInsertId();
+            return is_numeric($lastId) ? (int)$lastId : $lastId;
+        }
+        return $stmt->rowCount();
+    }
+
     public static function fetchAll(string $sql, array $params = []): array
     {
         return self::query($sql, $params)->fetchAll();

@@ -3,8 +3,8 @@ $user = \App\Core\Auth::user();
 ?>
 <nav class="navbar navbar-expand-lg navbar-light main_menu">
   <div class="container d-flex align-items-center justify-content-between">
-    <a class="navbar-brand" href="<?= \App\Core\View::url('/') ?>">
-      <img src="<?= \App\Core\View::asset('img/logo2.svg') ?>" alt="Primodomus">
+    <a class="navbar-brand py-0" href="<?= \App\Core\View::url('/') ?>">
+      <img src="<?= \App\Core\View::asset('img/refixel-logo-horizontal.png') ?>" alt="REFIXEL" style="height: 42px; width: auto; object-fit: contain;">
     </a>
 
     <!-- Desktop Navigation Links -->

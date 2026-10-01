@@ -25,7 +25,8 @@ INSERT INTO categories (id, name, slug, description, icon, sort_order, is_active
 (3, 'Pest Control', 'pest-control', 'Eco-friendly and odourless pest control solutions for cockroaches, termites, and pests.', 'Cockroach-Ant -Pest-Control -Services.webp', 3, 1),
 (4, 'Plumbers', 'plumbers', 'Expert plumbers for leak fixes, tap fittings, pipe blocks, and sanitary ware.', 'Plumber.webp', 4, 1),
 (5, 'Carpenter', 'carpenter', 'Skilled carpentry services for furniture repair, assembly, and bespoke woodwork.', 'Carpenter.webp', 5, 1),
-(6, 'AC Service & Repair', 'ac-services', 'High-pressure jet servicing, gas charging, filter sanitization, and cooling diagnostics.', 'AC-Services.webp', 6, 1);
+(6, 'AC Service & Repair', 'ac-services', 'High-pressure jet servicing, gas charging, filter sanitization, and cooling diagnostics.', 'AC-Services.webp', 6, 1),
+(7, 'Electrician', 'electrician', 'Professional electrician services for wiring, switchboards, MCBs, fans, and appliance installations.', 'repair.webp', 7, 1);
 
 -- 5. Staff Skills
 INSERT INTO staff_skills (staff_id, category_id) VALUES
@@ -52,12 +53,15 @@ INSERT INTO services (id, category_id, name, slug, description, starting_price, 
 (7, 3, 'Cockroach & Ant Pest Control', 'cockroach-pest-control', 'Gel baiting technology and odorless spray treatment across all corners.', 799.00, 45, 'Cockroach-Ant -Pest-Control -Services.webp', 1),
 (8, 4, 'Tap & Pipe Leak Repair', 'tap-leak-repair', 'Instant leak detection, washer replacement, and tight seal fittings.', 299.00, 45, 'Plumber.webp', 1),
 (9, 5, 'Furniture Assembly & Wood Repair', 'furniture-assembly', 'Expert carpenter visit for bed, table, wardrobe assembly, and hinge repairs.', 399.00, 60, 'Carpenter.webp', 1),
-(10, 6, 'AC High-Pressure Jet Service', 'ac-jet-service', 'Deep jet cleaning of indoor cooling coils and outdoor units for maximum airflow and cooling.', 599.00, 60, 'AC-Services.webp', 1);
+(10, 6, 'AC High-Pressure Jet Service', 'ac-jet-service', 'Deep jet cleaning of indoor cooling coils and outdoor units for maximum airflow and cooling.', 599.00, 60, 'AC-Services.webp', 1),
+(11, 7, 'Fan & Switchboard Repair', 'fan-switchboard-repair', 'Fixing switches, ceiling fans, sockets, wiring faults and circuit breakers.', 199.00, 45, 'repair.webp', 1);
 
 -- 8. Service Checklist Items
 INSERT INTO service_checklist_items (service_id, label, is_included, sort_order) VALUES
 (1, 'Mechanized single-disc floor buffing and scrubbing', 1, 1),
 (1, 'Bathroom tile descaling and mirror polishing', 1, 2),
+(11, 'Switch & socket diagnostic check', 1, 1),
+(11, 'Safe insulated testing and circuit isolation', 1, 2),
 (1, 'Kitchen cabinet interior and exterior degreasing', 1, 3),
 (1, 'Balcony, grills, and window glass wiping', 1, 4),
 (1, 'Wall painting touch-ups or civil work', 0, 5),
@@ -134,3 +138,16 @@ INSERT INTO jobs (id, booking_id, staff_id, status, scheduled_at, created_at) VA
 -- 15. Initial Status History for Demo Job
 INSERT INTO status_history (job_id, from_status, to_status, changed_by, notes, created_at) VALUES
 (1, 'new', 'assigned', 1, 'Assigned technician Rajesh Sharma to booking BK-DEMO-001', NOW());
+
+-- 16. Before / After Gallery Items Showcase
+INSERT INTO gallery_items (id, service_id, title, before_image, after_image, sort_order, is_active) VALUES
+(1, 1, 'Laundry & Room Deep Cleaning', 'assets/img/before-after-laundry-cleaning.png', 'assets/img/before-after-laundry-cleaning.png', 1, 1),
+(2, 7, 'Kitchen Pest Control & Roach Eradication', 'assets/img/before-after-pest-control.png', 'assets/img/before-after-pest-control.png', 2, 1),
+(3, 4, 'Sofa & Upholstery Deep Cleaning', 'assets/img/before-after-sofa-cleaning.png', 'assets/img/before-after-sofa-cleaning.png', 3, 1),
+(4, 6, 'Living Room Wall Painting & Refurbishment', 'assets/img/before-after-room-painting.png', 'assets/img/before-after-room-painting.png', 4, 1),
+(5, 9, 'TV Feature Wall & Carpentry Renovation', 'assets/img/before-after-wall-renovation.png', 'assets/img/before-after-wall-renovation.png', 5, 1),
+(6, 11, 'Electrical MCB Panel & Switchboard Overhaul', 'assets/img/before-after-electrical-repair.png', 'assets/img/before-after-electrical-repair.png', 6, 1),
+(7, 8, 'Under-Sink Pipe Leak & Drainage Repair', 'assets/img/before-after-plumbing-repair.png', 'assets/img/before-after-plumbing-repair.png', 7, 1),
+(8, 10, 'AC Jet Service & Cooling Coil Deep Cleansing', 'assets/img/before-after-ac-service.png', 'assets/img/before-after-ac-service.png', 8, 1);
+
+

@@ -24,7 +24,7 @@
     <div class="auth-card">
       <div class="auth-logo">
         <a href="<?= \App\Core\View::url('/') ?>">
-          <img src="<?= \App\Core\View::asset('img/logo2.svg') ?>" alt="Primodomus">
+          <img src="<?= \App\Core\View::asset('img/refixel-logo-horizontal.png') ?>" alt="REFIXEL" style="height: 48px; width: auto; object-fit: contain;">
         </a>
       </div>
       <?= $content ?? '' ?>

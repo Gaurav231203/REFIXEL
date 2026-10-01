@@ -21,9 +21,9 @@
     $defaultSchema = [
       '@context' => 'https://schema.org',
       '@type'    => 'HomeAndConstructionBusiness',
-      'name'     => \App\Models\Setting::get('company_name', 'Primodomus Home Services'),
+      'name'     => \App\Models\Setting::get('company_name', 'REFIXEL Home Services'),
       'url'      => $appUrl,
-      'logo'     => $appUrl . '/assets/img/logo.svg',
+      'logo'     => $appUrl . '/assets/img/refixel-logo-horizontal.png',
       'image'    => $appUrl . '/assets/img/hero-banner.webp',
       'telephone'=> \App\Models\Setting::get('company_phone', '+91 99533 58855'),
       'email'    => \App\Models\Setting::get('company_email', 'care@primodomus.com'),
@@ -64,8 +64,9 @@
 </head>
 <body>
   <!-- Promo Announcement Strip -->
-  <div class="top_offer_bar py-2 text-center text-white" style="background-color: #0b5341; font-size: 14px; font-weight: 500;">
-    <?= \App\Core\View::e(\App\Models\Setting::get('promo_strip_text', 'Starting at ₹999 • Save up to 25% on your first booking')) ?>
+  <div class="top_offer_bar py-2 text-center text-white" style="background-color: #0a1c33; font-size: 13.5px; font-weight: 500; letter-spacing: 0.2px;">
+    <?= \App\Core\View::e(\App\Models\Setting::get('promo_strip_text', 'Exclusive Special : Flat 20% Off on all deep-cleaning services.')) ?> 
+    <a href="<?= \App\Core\View::url('/services') ?>" class="text-white font-weight-bold ml-1 text-decoration-none" style="background: rgba(242,91,41,0.9); padding: 2px 10px; border-radius: 4px; font-size: 12px;">Book Now <i class="fa fa-arrow-right ml-1"></i></a>
   </div>
 
   <!-- Header Navigation -->

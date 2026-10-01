@@ -112,22 +112,69 @@ foreach ($checklist ?? [] as $item) {
           </div>
 
           <!-- Before / After Showcase Section -->
+          <?php
+          $svcSlugLower = strtolower($service['slug'] ?? '');
+          $transImg = 'before-after-laundry-cleaning.png';
+          $transCategory = 'Room Cleaning';
+          $transTitle = 'Laundry & Room Deep Cleaning Transformation';
+          $transDesc = 'Real results achieved by REFIXEL mechanized deep scrubbing, wall degreasing, and sanitized tile restoration.';
+
+          if (str_contains($svcSlugLower, 'pest') || str_contains($svcSlugLower, 'cockroach') || str_contains($svcSlugLower, 'ant')) {
+              $transImg = 'before-after-pest-control.png';
+              $transCategory = 'Pest Control';
+              $transTitle = 'Kitchen Under-Counter Pest Eradication Transformation';
+              $transDesc = '100% German cockroach nest eradication under kitchen cabinets using certified odorless gel-baiting and deep sanitization.';
+          } elseif (str_contains($svcSlugLower, 'sofa') || str_contains($svcSlugLower, 'upholstery') || str_contains($svcSlugLower, 'carpet')) {
+              $transImg = 'before-after-sofa-cleaning.png';
+              $transCategory = 'Sofa Cleaning';
+              $transTitle = 'Fabric Sofa Stain Extraction Transformation';
+              $transDesc = 'Deep fiber shampooing extracting dark stains, sweat marks, and allergens, restoring original soft texture and brightness.';
+          } elseif (str_contains($svcSlugLower, 'paint') || str_contains($svcSlugLower, 'color') || str_contains($svcSlugLower, 'wall')) {
+              $transImg = 'before-after-room-painting.png';
+              $transCategory = 'Room Painting';
+              $transTitle = 'Living Room Wall Painting & Makeover Transformation';
+              $transDesc = 'Mechanized dustless sanding, putty leveling, and 2-coat washable royal emulsion paint with false ceiling cove lighting.';
+          } elseif (str_contains($svcSlugLower, 'carpenter') || str_contains($svcSlugLower, 'furniture') || str_contains($svcSlugLower, 'wood')) {
+              $transImg = 'before-after-wall-renovation.png';
+              $transCategory = 'Home Renovation';
+              $transTitle = 'TV Feature Wall & Carpentry Renovation Transformation';
+              $transDesc = 'Raw brick masonry and electrical conduits rebuilt into a bespoke modern fluted wood entertainment wall with floating media console.';
+          } elseif (str_contains($svcSlugLower, 'electric') || str_contains($svcSlugLower, 'switch') || str_contains($svcSlugLower, 'mcb') || str_contains($svcSlugLower, 'fan') || str_contains($svcSlugLower, 'wiring')) {
+              $transImg = 'before-after-electrical-repair.png';
+              $transCategory = 'Electrical Repairs';
+              $transTitle = 'MCB Distribution Board & Concealed Switchboard Overhaul';
+              $transDesc = 'Exposed tangled conduits and hazardous live wiring replaced with flush-mount modular switchplates and safety-certified MCBs.';
+          } elseif (str_contains($svcSlugLower, 'plumb') || str_contains($svcSlugLower, 'leak') || str_contains($svcSlugLower, 'pipe') || str_contains($svcSlugLower, 'tap') || str_contains($svcSlugLower, 'drain')) {
+              $transImg = 'before-after-plumbing-repair.png';
+              $transCategory = 'Plumbing Repairs';
+              $transTitle = 'Under-Sink Pipe Leak & Sanitary Drainage Repair';
+              $transDesc = 'Rusted dripping joints and stagnant mold cleared out, replaced with heavy-duty anti-leak PVC P-traps and clean under-sink organization.';
+          } elseif (str_contains($svcSlugLower, 'ac') || str_contains($svcSlugLower, 'cool') || str_contains($svcSlugLower, 'jet') || str_contains($svcSlugLower, 'air')) {
+              $transImg = 'before-after-ac-service.png';
+              $transCategory = 'AC Jet Service';
+              $transTitle = 'Split AC Deep Foam Jet Wash & Cooling Coil Decontamination';
+              $transDesc = 'Clogged dust, mold, and odor eradicated with high-pressure water jet and antimicrobial foam wash, restoring instant ice-cold airflow.';
+          }
+          ?>
           <div class="mb-5">
-            <h3 class="font-weight-bold mb-3" style="font-size: 22px;">Transformation Showcase</h3>
-            <p class="text-muted small mb-3">Real results achieved by Primodomus mechanized tools and verified partners.</p>
-            <div class="row">
-              <div class="col-6">
-                <div class="position-relative rounded overflow-hidden shadow-sm">
-                  <img src="<?= \App\Core\View::asset('img/Full-home-clean.jpg') ?>" class="w-100" style="height: 180px; object-fit: cover;" alt="Before Cleaning">
-                  <span class="badge badge-dark position-absolute" style="top:10px; left:10px; opacity:0.85;">BEFORE</span>
-                </div>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <h3 class="font-weight-bold mb-0" style="font-size: 22px;">Transformation Showcase</h3>
+              <span class="badge badge-success px-3 py-1 font-weight-bold" style="background:#0f6e56; font-size:12px;">
+                <i class="fa fa-sparkles"></i> <?= $transCategory ?> Proof
+              </span>
+            </div>
+            <p class="text-muted small mb-3"><?= $transDesc ?></p>
+            <div class="position-relative rounded overflow-hidden shadow-sm border" style="border-radius: 14px;">
+              <img src="<?= \App\Core\View::asset('img/' . $transImg) ?>" class="w-100" style="display: block; object-fit: cover;" alt="<?= $transTitle ?>">
+            </div>
+            <div class="p-3 bg-light rounded mt-2 border d-flex justify-content-between align-items-center">
+              <div>
+                <strong style="font-size: 14.5px; color: #1e293b;"><?= $transTitle ?></strong>
+                <div class="text-muted small">Verified before & after documentation by REFIXEL certified partners.</div>
               </div>
-              <div class="col-6">
-                <div class="position-relative rounded overflow-hidden shadow-sm">
-                  <img src="<?= \App\Core\View::asset('img/bathroom_cleaning.webp') ?>" class="w-100" style="height: 180px; object-fit: cover;" alt="After Cleaning">
-                  <span class="badge badge-success position-absolute" style="top:10px; left:10px; background:#0f6e56;">AFTER</span>
-                </div>
-              </div>
+              <a href="<?= \App\Core\View::url('/gallery') ?>" class="btn btn-sm btn-outline-dark font-weight-bold">
+                View Full Gallery &rarr;
+              </a>
             </div>
           </div>
 
