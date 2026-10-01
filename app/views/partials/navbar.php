@@ -7,6 +7,18 @@ $user = \App\Core\Auth::user();
       <img src="<?= \App\Core\View::asset('img/logo2.svg') ?>" alt="Primodomus">
     </a>
 
+    <!-- Desktop Navigation Links -->
+    <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
+      <ul class="d-flex mb-0 pl-0 list-unstyled align-items-center" style="gap: 24px; font-weight: 500; font-size: 15px;">
+        <li><a href="<?= \App\Core\View::url('/') ?>" class="text-dark text-decoration-none hover-text-success">Home</a></li>
+        <li><a href="<?= \App\Core\View::url('/about') ?>" class="text-dark text-decoration-none hover-text-success">About</a></li>
+        <li><a href="<?= \App\Core\View::url('/services') ?>" class="text-dark text-decoration-none hover-text-success">Services</a></li>
+        <li><a href="<?= \App\Core\View::url('/blogs') ?>" class="text-dark text-decoration-none hover-text-success">Blogs</a></li>
+        <li><a href="<?= \App\Core\View::url('/contact') ?>" class="text-dark text-decoration-none hover-text-success">Contact Us</a></li>
+        <li><a href="<?= \App\Core\View::url('/partner') ?>" class="text-decoration-none px-3 py-1 rounded" style="background: rgba(15, 110, 86, 0.1); color: #0f6e56; font-weight: 600;">Service Partner</a></li>
+      </ul>
+    </div>
+
     <div class="d-flex align-items-center ml-auto">
       <div class="d-none d-lg-flex align-items-center mr-3">
         <a class="hdr-cart" id="hdrCart" href="<?= \App\Core\View::url('/cart') ?>" aria-label="Cart">

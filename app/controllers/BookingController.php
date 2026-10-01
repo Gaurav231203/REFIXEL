@@ -162,7 +162,48 @@ class BookingController extends Controller
 
         $bookingNo = Booking::generateBookingNo();
         $customerId = Auth::id(); // Null for guest, or user ID if authenticated
+        $phoneInput = preg_replace('/\D/', '', (string)$request->input('phone'));
+        $emailInput = $request->input('email') ? trim((string)$request->input('email')) : null;
+        $nameInput = trim((string)$request->input('name'));
+        
         $priority = in_array($request->input('priority'), ['high', 'urgent']) ? (string)$request->input('priority') : 'normal';
+
+        $addressInput = trim((string)$request->input('address'));
+        $cityInput = trim((string)$request->input('city', 'Gurugram'));
+        $stateInput = trim((string)$request->input('state', 'Haryana'));
+        $houseNoInput = trim((string)$request->input('house_no'));
+        $streetInput = trim((string)$request->input('street'));
+        $addressTypeInput = trim((string)$request->input('address_type', 'Home'));
+
+        // Guest Checkout: check if user exists, else create new account
+        if (!$customerId) {
+            $identifier = $emailInput ?: $phoneInput;
+            $existingUser = \App\Models\User::findByEmailOrPhone($identifier);
+            
+            if ($existingUser) {
+                $customerId = $existingUser['id'];
+            } else {
+                $generatedPassword = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$"), 0, 8);
+                $hashedPassword = password_hash($generatedPassword, PASSWORD_BCRYPT);
+                $customerId = \App\Core\Database::execute(
+                    "INSERT INTO users (name, phone, email, password, role) VALUES (?, ?, ?, ?, 'customer')",
+                    [$nameInput, $phoneInput, $emailInput, $hashedPassword],
+                    true // Return last insert ID
+                );
+                $_SESSION['guest_account_created'] = true;
+                $_SESSION['guest_account_password'] = $generatedPassword;
+                $_SESSION['guest_account_identifier'] = $emailInput ?: $phoneInput;
+            }
+        }
+
+        if ($customerId) {
+            $existingProfile = \App\Core\Database::fetchOne("SELECT id FROM customer_profiles WHERE user_id = ?", [$customerId]);
+            if ($existingProfile) {
+                \App\Core\Database::execute("UPDATE customer_profiles SET address = ?, pincode = ?, city = ?, state = ?, house_no = ?, street = ?, address_type = ? WHERE user_id = ?", [$addressInput, $pincode, $cityInput, $stateInput, $houseNoInput, $streetInput, $addressTypeInput, $customerId]);
+            } else {
+                \App\Core\Database::execute("INSERT INTO customer_profiles (user_id, address, pincode, city, state, house_no, street, address_type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [$customerId, $addressInput, $pincode, $cityInput, $stateInput, $houseNoInput, $streetInput, $addressTypeInput]);
+            }
+        }
 
         $bookingId = Booking::create([
             'booking_no'     => $bookingNo,
@@ -229,6 +270,12 @@ class BookingController extends Controller
                 'preferred_date' => (string)$request->input('preferred_date'),
                 'preferred_time' => (string)$request->input('preferred_time'),
             ];
+
+            if (isset($_SESSION['guest_account_created']) && $_SESSION['guest_account_created'] === true) {
+                $bookingRecord['generated_password'] = $_SESSION['guest_account_password'];
+                $bookingRecord['identifier'] = $_SESSION['guest_account_identifier'];
+            }
+
             Notifier::notifyNewBookingAdmin($bookingRecord);
             Notifier::notifyBookingConfirmationCustomer($bookingRecord);
         } catch (\Throwable $e) {

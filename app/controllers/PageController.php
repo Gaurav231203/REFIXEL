@@ -54,6 +54,29 @@ class PageController extends Controller
         return $this->render('customer.blog', ['title' => 'Blog & Home Guides | Primodomus'], 'customer');
     }
 
+    public function partner(Request $request): Response
+    {
+        $cities = \App\Models\ServiceArea::getActiveCities();
+        $categories = \App\Models\Category::getActive();
+        
+        return $this->render('customer.partner', [
+            'title' => 'Become a Service Partner | Primodomus',
+            'cities' => $cities,
+            'categories' => $categories
+        ], 'customer');
+    }
+
+    public function submitPartner(Request $request): Response
+    {
+        $name = $request->post('name');
+        $phone = $request->post('phone');
+        $trade = $request->post('trade');
+        
+        // Normally, save this to DB or send email.
+        $_SESSION['flash_success'] = "Thank you, $name! Your application for $trade has been received. Our team will contact you shortly.";
+        return $this->redirect('/partner');
+    }
+
     public function sitemap(Request $request): Response
     {
         $baseUrl = rtrim((string)\App\Core\Env::get('APP_URL', 'https://www.primodomus.com'), '/');

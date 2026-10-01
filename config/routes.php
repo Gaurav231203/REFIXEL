@@ -32,6 +32,9 @@ Router::get('/refund-policy.php', 'PageController@refund');
 Router::get('/blog', 'PageController@blog');
 Router::get('/blog.php', 'PageController@blog');
 
+Router::get('/partner', 'PageController@partner');
+Router::post('/partner', 'PageController@submitPartner');
+
 Router::get('/services', 'ServiceController@index');
 
 Router::get('/sitemap.xml', 'PageController@sitemap');
@@ -96,6 +99,7 @@ Router::group(['middleware' => ['RequireRole:customer']], function () {
     Router::get('/account/invoices', 'AccountController@invoices');
     Router::get('/account/invoices/{id}', 'AccountController@invoiceDetail');
     Router::get('/account/profile', 'AccountController@profile');
+    Router::post('/account/profile', 'AccountController@updateProfile', ['VerifyCsrf']);
     Router::get('/account/privacy', 'AccountController@privacy');
     Router::get('/account/privacy/export', 'AccountController@exportData');
     Router::post('/account/privacy/delete-request', 'AccountController@requestDataDeletion', ['VerifyCsrf']);

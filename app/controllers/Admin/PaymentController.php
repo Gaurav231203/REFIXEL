@@ -27,7 +27,7 @@ class PaymentController extends Controller
         );
 
         $unpaidBookings = Database::fetchAll(
-            "SELECT b.id, b.booking_no, b.name, b.starting_price, s.name as service_name
+            "SELECT b.id, b.booking_no, b.name, s.starting_price, s.name as service_name
              FROM bookings b
              JOIN services s ON b.service_id = s.id
              LEFT JOIN payments p ON b.id = p.booking_id AND p.status = 'paid'

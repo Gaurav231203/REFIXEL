@@ -1,71 +1,60 @@
-<div class="container py-5 my-3">
-  <!-- Breadcrumb -->
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-transparent p-0 mb-4" style="font-size: 14px;">
-      <li class="breadcrumb-item"><a href="<?= \App\Core\View::url('/') ?>" style="color:#0f6e56;">Home</a></li>
-      <li class="breadcrumb-item"><a href="<?= \App\Core\View::url('/account') ?>" style="color:#0f6e56;">My Account</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Invoices & Receipts</li>
-    </ol>
-  </nav>
-
-  <div class="card p-4 p-md-5 border-0 shadow-sm" style="border-radius: 16px;">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div>
-        <h2 class="font-weight-bold mb-1" style="font-size: 26px; color: #1a1a1a;">GST Tax Invoices & Receipts</h2>
-        <p class="text-muted small mb-0">Download official tax invoices for your completed service visits.</p>
-      </div>
+<div class="dash-card p-4 p-md-5">
+  <div class="d-flex justify-content-between align-items-center mb-4 pb-3" style="border-bottom: 1px solid #edf2f7;">
+    <div>
+      <h3 class="dash-heading mb-1">GST Tax Invoices & Receipts</h3>
+      <p class="text-muted small mb-0" style="font-weight: 400;">Download official tax invoices for your completed service visits.</p>
     </div>
-
-    <?php if (!empty($invoices)): ?>
-      <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0" style="font-size: 14.5px;">
-          <thead class="thead-light">
-            <tr>
-              <th>Invoice #</th>
-              <th>Booking #</th>
-              <th>Date</th>
-              <th>Total Amount</th>
-              <th>GST Tax (18%)</th>
-              <th>Status</th>
-              <th>Download</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($invoices as $inv): ?>
-              <tr>
-                <td class="font-weight-bold text-dark"><?= \App\Core\View::e($inv['invoice_no']) ?></td>
-                <td>
-                  <a href="<?= \App\Core\View::url('/account/bookings/' . (int)$inv['booking_id']) ?>" class="font-weight-bold" style="color:#0f6e56;">
-                    #<?= \App\Core\View::e($inv['booking_no'] ?? 'N/A') ?>
-                  </a>
-                </td>
-                <td><?= \App\Core\View::e(substr((string)$inv['issued_at'], 0, 10)) ?></td>
-                <td class="font-weight-bold text-success">₹<?= number_format((float)$inv['total'], 2) ?></td>
-                <td class="text-muted">₹<?= number_format((float)$inv['gst_amount'], 2) ?></td>
-                <td>
-                  <span class="badge badge-success p-2 font-weight-bold text-uppercase">
-                    PAID
-                  </span>
-                </td>
-                <td>
-                  <a href="<?= \App\Core\View::url('/account/invoices/' . (int)$inv['id']) ?>" class="btn btn-sm btn-outline-dark font-weight-bold">
-                    <i class="fa fa-file-pdf-o text-danger mr-1"></i> Receipt
-                  </a>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      </div>
-    <?php else: ?>
-      <div class="text-center py-5 text-muted">
-        <i class="fa fa-file-text-o mb-3" style="font-size: 48px; color: #cbd5e1;"></i>
-        <h5 class="font-weight-bold">No invoices generated yet</h5>
-        <p class="small text-muted mb-3">Invoices and formal GST receipts are automatically created when your technician completes the service.</p>
-        <a href="<?= \App\Core\View::url('/services') ?>" class="btn text-white px-4 py-2 font-weight-bold" style="background:#0f6e56; border-radius: 8px;">
-          Explore Services
-        </a>
-      </div>
-    <?php endif; ?>
   </div>
+
+  <?php if (!empty($invoices)): ?>
+    <div class="table-responsive" style="overflow-x: auto;">
+      <table class="table dash-table w-100 mb-0">
+        <thead>
+          <tr>
+            <th>Invoice #</th>
+            <th>Booking #</th>
+            <th>Date</th>
+            <th>Total Amount</th>
+            <th>GST Tax (18%)</th>
+            <th>Status</th>
+            <th>Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($invoices as $inv): ?>
+            <tr>
+              <td class="font-weight-500 text-dark"><?= \App\Core\View::e($inv['invoice_no']) ?></td>
+              <td>
+                <a href="<?= \App\Core\View::url('/account/bookings/' . (int)$inv['booking_id']) ?>" class="font-weight-500 text-decoration-none" style="color:#0f6e56;">
+                  #<?= \App\Core\View::e($inv['booking_no'] ?? 'N/A') ?>
+                </a>
+              </td>
+              <td class="text-muted"><?= \App\Core\View::e(substr((string)$inv['issued_at'], 0, 10)) ?></td>
+              <td class="font-weight-500" style="color: #0f6e56;">₹<?= number_format((float)$inv['total'], 2) ?></td>
+              <td class="text-muted">₹<?= number_format((float)$inv['gst_amount'], 2) ?></td>
+              <td>
+                <span class="badge-soft badge-soft-success">PAID</span>
+              </td>
+              <td>
+                <a href="<?= \App\Core\View::url('/account/invoices/' . (int)$inv['id']) ?>" class="btn soft-btn soft-btn-outline btn-sm">
+                  <i class="fa fa-file-pdf-o mr-1"></i> Receipt
+                </a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+  <?php else: ?>
+    <div class="text-center py-5 text-muted">
+      <div class="mb-3" style="width: 64px; height: 64px; background: #f8fafc; color: #94a3b8; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">
+        <i class="fa fa-file-text-o" style="font-size: 24px;"></i>
+      </div>
+      <h6 class="dash-heading text-dark mb-1">No invoices generated yet</h6>
+      <p class="small text-muted mb-4">Invoices and formal GST receipts are automatically created when your technician completes the service.</p>
+      <a href="<?= \App\Core\View::url('/services') ?>" class="btn soft-btn soft-btn-primary px-4 py-2">
+        Explore Services
+      </a>
+    </div>
+  <?php endif; ?>
 </div>

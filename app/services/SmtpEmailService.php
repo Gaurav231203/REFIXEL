@@ -92,6 +92,16 @@ class SmtpEmailService implements EmailProviderInterface
                 $body .= "<p>Thank you for choosing Primodomus. We have scheduled your <strong>" . htmlspecialchars($data['service_name'] ?? 'Service') . "</strong> on <strong>" . htmlspecialchars($data['preferred_date'] ?? '') . " (" . htmlspecialchars($data['preferred_time'] ?? '') . ")</strong>.</p>";
                 $body .= "<p><strong>Booking Ref:</strong> #" . htmlspecialchars($data['booking_no'] ?? '') . "<br>";
                 $body .= "<strong>Address:</strong> " . htmlspecialchars($data['address'] ?? '') . "</p>";
+                
+                if (!empty($data['generated_password'])) {
+                    $body .= "<div style='background-color: #f0fdf4; border: 1px solid #dcfce7; padding: 15px; border-radius: 8px; margin-top: 20px;'>";
+                    $body .= "<h4 style='color: #166534; margin-top: 0;'>Account Created Successfully</h4>";
+                    $body .= "<p style='margin-bottom: 5px;'>We have created an account for you to track your bookings:</p>";
+                    $body .= "<p style='margin-top: 0;'><strong>Login ID:</strong> " . htmlspecialchars($data['identifier'] ?? '') . "<br>";
+                    $body .= "<strong>Password:</strong> " . htmlspecialchars($data['generated_password']) . "</p>";
+                    $body .= "<p style='font-size: 12px; color: #666; margin-bottom: 0;'>You can change this password after logging in.</p>";
+                    $body .= "</div>";
+                }
                 break;
 
             case 'admin_new_booking':

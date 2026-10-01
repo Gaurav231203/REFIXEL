@@ -1,127 +1,148 @@
-<div class="container py-5 my-3">
-  <!-- Breadcrumb -->
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-transparent p-0 mb-4" style="font-size: 14px;">
-      <li class="breadcrumb-item"><a href="<?= \App\Core\View::url('/') ?>" style="color:#0f6e56;">Home</a></li>
-      <li class="breadcrumb-item active" aria-current="page">My Account</li>
-    </ol>
-  </nav>
+<!-- Welcome Hero Banner -->
+<div class="p-3 p-md-4 mb-4 dash-card position-relative glass-banner" style="overflow: hidden; border: none;">
+  <div class="glass-blob top-right"></div>
+  <div class="glass-blob bottom-right"></div>
+  
+  <h4 class="dash-heading mb-1 position-relative text-dark" style="z-index: 2;">Welcome back, <?= \App\Core\View::e($user['name']) ?>! 👋</h4>
+  <p class="mb-0 position-relative text-muted" style="font-size: 14px; font-weight: 400; z-index: 2;">Manage your home maintenance requests, view assigned technicians, and download GST receipts.</p>
+</div>
 
-  <div class="row">
-    <!-- Account Sidebar Navigation -->
-    <div class="col-lg-3 mb-4">
-      <div class="card p-3 border-0 shadow-sm" style="border-radius: 14px;">
-        <div class="d-flex align-items-center p-2 mb-3 border-bottom pb-3">
-          <img src="<?= \App\Core\View::asset('img/account.webp') ?>" alt="User" class="rounded-circle mr-3" style="width: 48px; height: 48px;">
-          <div>
-            <h6 class="font-weight-bold mb-0"><?= \App\Core\View::e($user['name']) ?></h6>
-            <small class="text-muted"><?= \App\Core\View::e($user['phone'] ?? $user['email']) ?></small>
-          </div>
-        </div>
-
-        <div class="list-group list-group-flush" style="font-size: 14.5px;">
-          <a href="<?= \App\Core\View::url('/account') ?>" class="list-group-item list-group-item-action border-0 font-weight-bold text-success">
-            <i class="fa fa-dashboard mr-2"></i> Dashboard Overview
-          </a>
-          <a href="<?= \App\Core\View::url('/account/bookings') ?>" class="list-group-item list-group-item-action border-0">
-            <i class="fa fa-calendar mr-2"></i> My Bookings
-          </a>
-          <a href="<?= \App\Core\View::url('/account/invoices') ?>" class="list-group-item list-group-item-action border-0">
-            <i class="fa fa-file-text-o mr-2"></i> Invoices & Receipts
-          </a>
-          <a href="<?= \App\Core\View::url('/account/profile') ?>" class="list-group-item list-group-item-action border-0">
-            <i class="fa fa-user-circle mr-2"></i> Profile & Address
-          </a>
-          <a href="<?= \App\Core\View::url('/account/privacy') ?>" class="list-group-item list-group-item-action border-0">
-            <i class="fa fa-shield mr-2"></i> Privacy & Data Rights
-          </a>
-          <a href="<?= \App\Core\View::url('/logout') ?>" class="list-group-item list-group-item-action border-0 text-danger">
-            <i class="fa fa-sign-out mr-2"></i> Sign Out
-          </a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Account Content -->
-    <div class="col-lg-9">
-      <!-- Welcome Hero Banner -->
-      <div class="p-4 rounded mb-4" style="background: linear-gradient(135deg, #0f6e56 0%, #0b5341 100%); color: #ffffff; border-radius: 16px;">
-        <h3 class="font-weight-bold mb-1">Welcome back, <?= \App\Core\View::e($user['name']) ?>!</h3>
-        <p class="mb-0" style="opacity: 0.9; font-size: 14.5px;">Manage your home maintenance requests, view assigned technicians, and download GST receipts.</p>
-      </div>
-
-      <!-- Quick Stats Cards -->
-      <div class="row mb-4">
-        <div class="col-md-4 mb-3">
-          <div class="card p-3 border-0 shadow-sm" style="border-radius: 12px;">
-            <span class="text-muted small">Total Bookings</span>
-            <h3 class="font-weight-bold mb-0 text-dark"><?= count($bookings ?? []) ?></h3>
-          </div>
-        </div>
-        <div class="col-md-4 mb-3">
-          <div class="card p-3 border-0 shadow-sm" style="border-radius: 12px;">
-            <span class="text-muted small">Account Status</span>
-            <h3 class="font-weight-bold mb-0 text-success">Active</h3>
-          </div>
-        </div>
-        <div class="col-md-4 mb-3">
-          <div class="card p-3 border-0 shadow-sm" style="border-radius: 12px;">
-            <span class="text-muted small">Satisfaction Guarantee</span>
-            <h3 class="font-weight-bold mb-0" style="color:#0f6e56;">24h Protected</h3>
-          </div>
-        </div>
-      </div>
-
-      <!-- Recent Bookings Table -->
-      <div class="card p-4 border-0 shadow-sm" style="border-radius: 16px;">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5 class="font-weight-bold mb-0" style="font-size: 18px;">Recent Service Bookings</h5>
-          <a href="<?= \App\Core\View::url('/account/bookings') ?>" class="small font-weight-bold text-success">View All &rarr;</a>
-        </div>
-
-        <?php if (!empty($bookings)): ?>
-          <div class="table-responsive">
-            <table class="table table-hover mb-0" style="font-size: 14px;">
-              <thead class="thead-light">
-                <tr>
-                  <th>Booking No</th>
-                  <th>Service</th>
-                  <th>Date & Time</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php foreach ($bookings as $b): ?>
-                  <tr>
-                    <td class="font-weight-bold"><?= \App\Core\View::e($b['booking_no']) ?></td>
-                    <td><?= \App\Core\View::e($b['service_name'] ?? 'Home Service') ?></td>
-                    <td><?= \App\Core\View::e($b['preferred_date']) ?> <br><small class="text-muted"><?= \App\Core\View::e($b['preferred_time']) ?></small></td>
-                    <td>
-                      <span class="badge badge-<?= $b['status'] === 'completed' ? 'success' : ($b['status'] === 'in_progress' ? 'info' : 'warning') ?> p-2">
-                        <?= strtoupper(\App\Core\View::e($b['status'])) ?>
-                      </span>
-                    </td>
-                    <td>
-                      <a href="<?= \App\Core\View::url('/account/bookings/' . (int)$b['id']) ?>" class="btn btn-sm btn-outline-secondary">
-                        View
-                      </a>
-                    </td>
-                  </tr>
-                <?php endforeach; ?>
-              </tbody>
-            </table>
-          </div>
-        <?php else: ?>
-          <div class="text-center py-4 text-muted">
-            <i class="fa fa-calendar-o mb-2" style="font-size: 32px; color: #cbd5e1;"></i>
-            <p class="mb-2">You haven't scheduled any service bookings yet.</p>
-            <a href="<?= \App\Core\View::url('/services') ?>" class="btn text-white btn-sm px-3 font-weight-bold" style="background:#0f6e56;">
-              Explore Services Now
-            </a>
-          </div>
-        <?php endif; ?>
-      </div>
+<!-- Quick Stats Cards -->
+<div class="row mb-4 px-2 px-md-0">
+  <div class="col-6 col-md-4 mb-3 px-2">
+    <div class="dash-card p-3 p-md-4 text-center h-100" style="background: #f0fdf4; border-color: #dcfce7;">
+      <span class="text-muted small font-weight-500 text-uppercase d-block mb-1" style="letter-spacing: 0.5px; font-size: 11px;">Total Bookings</span>
+      <h2 class="dash-heading mb-0 text-dark mt-1" style="font-size: 1.5rem;"><?= count($bookings ?? []) ?></h2>
     </div>
   </div>
+  <div class="col-6 col-md-4 mb-3 px-2">
+    <div class="dash-card p-3 p-md-4 text-center h-100" style="background: #eff6ff; border-color: #dbeafe;">
+      <span class="text-muted small font-weight-500 text-uppercase d-block mb-1" style="letter-spacing: 0.5px; font-size: 11px;">Account Status</span>
+      <h2 class="dash-heading mb-0 mt-1" style="color: #1d4ed8; font-size: 1.2rem;"><i class="fa fa-check-circle mr-1" style="opacity: 0.8;"></i> Active</h2>
+    </div>
+  </div>
+  <div class="col-12 col-md-4 mb-3 px-2">
+    <div class="dash-card p-3 p-md-4 text-center h-100" style="background: #fffbeb; border-color: #fef3c7;">
+      <span class="text-muted small font-weight-500 text-uppercase d-block mb-1" style="letter-spacing: 0.5px; font-size: 11px;">Protection</span>
+      <h2 class="dash-heading mb-0 mt-1" style="color: #b45309; font-size: 1.2rem;"><i class="fa fa-shield mr-1" style="opacity: 0.8;"></i> 24h</h2>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Bookings Table -->
+<div class="dash-card p-2 p-md-4">
+  <div class="d-flex justify-content-between align-items-center mb-4 pb-3 px-2 px-md-0" style="border-bottom: 1px solid #edf2f7;">
+    <h5 class="dash-heading mb-0">Recent Service Bookings</h5>
+    <a href="<?= \App\Core\View::url('/account/bookings') ?>" class="btn soft-btn soft-btn-outline btn-sm px-3 py-1 text-nowrap">View All &rarr;</a>
+  </div>
+
+  <?php if (!empty($bookings)): ?>
+    
+    <!-- Mobile Card View -->
+    <div class="d-block d-md-none px-2">
+      <?php $count = 0; foreach ($bookings as $b): if ($count++ >= 3) break; ?>
+        <?php
+        $badgeClass = match($b['status']) {
+          'new'         => 'badge-soft-warning',
+          'assigned'    => 'badge-soft-info',
+          'accepted'    => 'badge-soft-info',
+          'in_progress' => 'badge-soft-info',
+          'completed'   => 'badge-soft-success',
+          'invoiced'    => 'badge-soft-success',
+          'reviewed'    => 'badge-soft-success',
+          'cancelled'   => 'badge-soft-danger',
+          default       => 'badge-soft-warning'
+        };
+        ?>
+        <div class="dash-card p-3 mb-3" style="background: #ffffff; border: 1px solid #f1f5f9; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+          <!-- Header: Booking Number & Status -->
+          <div class="d-flex justify-content-between align-items-center mb-3 pb-3" style="border-bottom: 1px solid #f1f5f9;">
+            <div>
+              <span class="text-muted d-block" style="font-size: 11px; text-transform: uppercase;">Booking ID</span>
+              <h5 class="dash-heading mb-0 text-dark" style="font-size: 16px;">#<?= \App\Core\View::e($b['booking_no']) ?></h5>
+            </div>
+            <span class="badge-soft <?= $badgeClass ?>" style="font-size: 11px; padding: 5px 10px; border-radius: 6px;">
+              <?= strtoupper(str_replace('_', ' ', \App\Core\View::e($b['status']))) ?>
+            </span>
+          </div>
+          
+          <!-- Content -->
+          <div class="mb-3">
+            <div class="font-weight-600 mb-2" style="color: #0f6e56; font-size: 14px;"><?= \App\Core\View::e($b['service_name'] ?? 'Home Service') ?></div>
+            <div class="d-flex align-items-center text-muted" style="font-size: 12px;">
+              <div class="mr-3"><i class="fa fa-calendar text-primary opacity-75 mr-1"></i> <?= \App\Core\View::e($b['preferred_date']) ?></div>
+              <div><i class="fa fa-clock-o text-primary opacity-75 mr-1"></i> <?= \App\Core\View::e($b['preferred_time']) ?></div>
+            </div>
+          </div>
+
+          <!-- Bottom Action -->
+          <a href="<?= \App\Core\View::url('/account/bookings/' . (int)$b['id']) ?>" class="btn soft-btn soft-btn-outline w-100 py-2 d-flex justify-content-between align-items-center" style="font-size: 13px; border-radius: 8px;">
+            <span>View Job Details</span>
+            <i class="fa fa-arrow-right"></i>
+          </a>
+        </div>
+      <?php endforeach; ?>
+    </div>
+
+    <!-- Desktop Table View -->
+    <div class="d-none d-md-block table-responsive" style="overflow-x: auto;">
+      <table class="table dash-table w-100 mb-0">
+        <thead>
+          <tr>
+            <th>Booking No</th>
+            <th>Service</th>
+            <th>Date & Time</th>
+            <th>Status</th>
+            <th class="text-right">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php $count = 0; foreach ($bookings as $b): if ($count++ >= 3) break; ?>
+            <tr>
+              <td class="font-weight-500 text-dark">#<?= \App\Core\View::e($b['booking_no']) ?></td>
+              <td class="font-weight-500"><span style="color: #0f6e56;"><?= \App\Core\View::e($b['service_name'] ?? 'Home Service') ?></span></td>
+              <td>
+                <div class="text-dark font-weight-500"><?= \App\Core\View::e($b['preferred_date']) ?></div>
+                <small class="text-muted"><?= \App\Core\View::e($b['preferred_time']) ?></small>
+              </td>
+              <td>
+                <?php
+                $badgeClass = match($b['status']) {
+                  'new'         => 'badge-soft-warning',
+                  'assigned'    => 'badge-soft-info',
+                  'accepted'    => 'badge-soft-info',
+                  'in_progress' => 'badge-soft-info',
+                  'completed'   => 'badge-soft-success',
+                  'invoiced'    => 'badge-soft-success',
+                  'reviewed'    => 'badge-soft-success',
+                  'cancelled'   => 'badge-soft-danger',
+                  default       => 'badge-soft-warning'
+                };
+                ?>
+                <span class="badge-soft <?= $badgeClass ?>">
+                  <?= strtoupper(str_replace('_', ' ', \App\Core\View::e($b['status']))) ?>
+                </span>
+              </td>
+              <td class="text-right">
+                <a href="<?= \App\Core\View::url('/account/bookings/' . (int)$b['id']) ?>" class="btn soft-btn soft-btn-outline btn-sm px-3">
+                  View &rarr;
+                </a>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+  <?php else: ?>
+    <div class="text-center py-5 text-muted">
+      <div class="mb-3" style="width: 64px; height: 64px; background: #f0fdf4; color: #16a34a; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;">
+        <i class="fa fa-calendar-o" style="font-size: 24px;"></i>
+      </div>
+      <h6 class="dash-heading text-dark mb-1">No bookings yet</h6>
+      <p class="mb-4 small" style="opacity: 0.8;">You haven't scheduled any service bookings yet.</p>
+      <a href="<?= \App\Core\View::url('/services') ?>" class="btn soft-btn soft-btn-primary px-4 py-2">
+        Explore Services
+      </a>
+    </div>
+  <?php endif; ?>
 </div>

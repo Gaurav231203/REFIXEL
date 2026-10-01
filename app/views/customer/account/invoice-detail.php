@@ -3,16 +3,9 @@ use App\Core\View;
 $invoice = $invoice ?? [];
 ?>
 
-<div class="container py-5 my-3">
   <!-- Top Navigation & Actions -->
   <div class="d-flex justify-content-between align-items-center mb-4 d-print-none flex-wrap" style="gap: 10px;">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb bg-transparent p-0 mb-0" style="font-size: 14px;">
-        <li class="breadcrumb-item"><a href="<?= View::url('/') ?>" style="color:#0f6e56;">Home</a></li>
-        <li class="breadcrumb-item"><a href="<?= View::url('/account/invoices') ?>" style="color:#0f6e56;">My Invoices</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Invoice #<?= View::e($invoice['invoice_no']) ?></li>
-      </ol>
-    </nav>
+    <h3 class="m-0">Invoice Details</h3>
     <div class="d-flex" style="gap: 8px;">
       <a href="<?= View::url('/account/invoices') ?>" class="btn btn-outline-secondary font-weight-bold btn-sm">
         <i class="fa fa-arrow-left mr-1"></i> Back to Invoices

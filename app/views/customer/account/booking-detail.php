@@ -13,16 +13,6 @@ foreach ($payments as $p) {
     }
 }
 ?>
-<div class="container py-5 my-3">
-  <!-- Breadcrumb -->
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb bg-transparent p-0 mb-4" style="font-size: 14px;">
-      <li class="breadcrumb-item"><a href="<?= \App\Core\View::url('/') ?>" style="color:#0f6e56;">Home</a></li>
-      <li class="breadcrumb-item"><a href="<?= \App\Core\View::url('/account/bookings') ?>" style="color:#0f6e56;">My Bookings</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Booking #<?= $bNo ?></li>
-    </ol>
-  </nav>
-
   <div class="row">
     <!-- Booking Details Column -->
     <div class="col-lg-8 mb-4">
@@ -53,7 +43,6 @@ foreach ($payments as $p) {
           </span>
         </div>
 
-        <!-- Workflow Progress Timeline -->
         <div class="p-3 rounded bg-light border mb-4">
           <h6 class="font-weight-bold mb-3" style="font-size: 14px; color: #0f6e56;">Service Progress Tracking</h6>
           <?php if (in_array($booking['status'], ['cancelled', 'refund_requested', 'refunded'])): ?>
@@ -69,22 +58,22 @@ foreach ($payments as $p) {
               <?php endif; ?>
             </div>
           <?php else: ?>
-            <div class="d-flex justify-content-between text-center flex-wrap" style="gap: 8px; font-size: 12px;">
+            <div class="d-flex justify-content-between text-center" style="gap: 15px; font-size: 12px; overflow-x: auto; white-space: nowrap; padding-bottom: 5px;">
               <div class="<?= in_array($booking['status'], ['new', 'rescheduled', 'assigned', 'accepted', 'in_progress', 'completed', 'invoiced', 'reviewed', 'closed']) ? 'text-success font-weight-bold' : 'text-muted' ?>">
-                <i class="fa fa-dot-circle-o d-block mb-1" style="font-size: 18px;"></i>
+                <i class="fa fa-dot-circle-o d-block mb-1 mx-auto" style="font-size: 18px;"></i>
                 <?= $booking['status'] === 'rescheduled' ? 'Rescheduled' : 'Booked' ?>
               </div>
               <div class="<?= in_array($booking['status'], ['assigned', 'accepted', 'in_progress', 'completed', 'invoiced', 'reviewed', 'closed']) ? 'text-success font-weight-bold' : 'text-muted' ?>">
-                <i class="fa fa-user d-block mb-1" style="font-size: 18px;"></i> Assigned
+                <i class="fa fa-user d-block mb-1 mx-auto" style="font-size: 18px;"></i> Assigned
               </div>
               <div class="<?= in_array($booking['status'], ['in_progress', 'completed', 'invoiced', 'reviewed', 'closed']) ? 'text-success font-weight-bold' : 'text-muted' ?>">
-                <i class="fa fa-wrench d-block mb-1" style="font-size: 18px;"></i> In Progress
+                <i class="fa fa-wrench d-block mb-1 mx-auto" style="font-size: 18px;"></i> In Progress
               </div>
               <div class="<?= in_array($booking['status'], ['completed', 'invoiced', 'reviewed', 'closed']) ? 'text-success font-weight-bold' : 'text-muted' ?>">
-                <i class="fa fa-check-circle d-block mb-1" style="font-size: 18px;"></i> Completed
+                <i class="fa fa-check-circle d-block mb-1 mx-auto" style="font-size: 18px;"></i> Completed
               </div>
               <div class="<?= in_array($booking['status'], ['invoiced', 'reviewed', 'closed']) ? 'text-success font-weight-bold' : 'text-muted' ?>">
-                <i class="fa fa-file-text-o d-block mb-1" style="font-size: 18px;"></i> Invoiced
+                <i class="fa fa-file-text-o d-block mb-1 mx-auto" style="font-size: 18px;"></i> Invoiced
               </div>
             </div>
           <?php endif; ?>

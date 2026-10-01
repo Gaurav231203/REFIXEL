@@ -20,6 +20,30 @@
           A confirmation SMS and WhatsApp message has been dispatched to your mobile number. A verified technician will call you 30 minutes prior to arrival.
         </p>
 
+        <?php if (isset($_SESSION['guest_account_created']) && $_SESSION['guest_account_created'] === true): ?>
+          <div class="alert alert-success text-left p-4 mb-4" style="border-radius: 12px; border: 1px solid #dcfce7; background-color: #f0fdf4;">
+            <h5 class="alert-heading font-weight-bold mb-2" style="color: #166534;"><i class="fa fa-user-circle mr-2"></i> Account Created Automatically!</h5>
+            <p class="small mb-3" style="color: #15803d;">We have created a free account for you so you can easily track your bookings and download invoices.</p>
+            <div class="bg-white p-3 rounded border">
+              <div class="mb-2">
+                <span class="text-muted small">Login ID (Mobile/Email):</span><br>
+                <strong class="text-dark" style="font-size: 15px;"><?= \App\Core\View::e($_SESSION['guest_account_identifier']) ?></strong>
+              </div>
+              <div>
+                <span class="text-muted small">Temporary Password:</span><br>
+                <strong class="text-dark" style="font-size: 15px; font-family: monospace; letter-spacing: 1px;"><?= \App\Core\View::e($_SESSION['guest_account_password']) ?></strong>
+              </div>
+            </div>
+            <p class="small mt-3 mb-0 text-muted"><em>Please save these details. You can change your password anytime from your account profile.</em></p>
+          </div>
+          <?php 
+            // Clear the session so it doesn't show again if refreshed
+            unset($_SESSION['guest_account_created']); 
+            unset($_SESSION['guest_account_password']); 
+            unset($_SESSION['guest_account_identifier']); 
+          ?>
+        <?php endif; ?>
+
         <div class="d-flex flex-column flex-sm-row justify-content-center" style="gap: 12px;">
           <?php if (\App\Core\Auth::check()): ?>
             <a href="<?= \App\Core\View::url('/account/bookings') ?>" class="btn text-white px-4 py-2 font-weight-bold" style="background:#0f6e56; border-radius: 8px;">

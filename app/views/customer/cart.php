@@ -3,7 +3,8 @@
  * Primodomus - Customer Cart View
  */
 $user = \App\Core\Auth::user();
-$currentCity = $_SESSION['selected_city'] ?? 'Gurugram';
+$customerProfile = $user ? \App\Core\Database::fetchOne("SELECT address, city, pincode FROM customer_profiles WHERE user_id = ?", [$user['id']]) : null;
+$currentCity = $_SESSION['selected_city'] ?? ($customerProfile['city'] ?? 'Gurugram');
 $items = $cart['items'] ?? [];
 $isEmpty = $cart['is_empty'] ?? empty($items);
 ?>
@@ -105,20 +106,51 @@ $isEmpty = $cart['is_empty'] ?? empty($items);
               <input type="email" name="email" class="form-control" value="<?= \App\Core\View::e($user['email'] ?? '') ?>" placeholder="rahul@example.com">
             </div>
 
-            <div class="form-group">
-              <label class="font-weight-bold small">Complete Service Address <span class="text-danger">*</span></label>
-              <textarea name="address" rows="2" class="form-control" placeholder="House/Flat No., Tower, Society, Street" required></textarea>
+            <div class="form-group mb-3 mt-4">
+              <label class="font-weight-bold small d-block mb-2">Address Type</label>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="typeHomeCart" name="address_type" class="custom-control-input" value="Home" <?= ($customerProfile['address_type'] ?? 'Home') === 'Home' ? 'checked' : '' ?>>
+                <label class="custom-control-label small" for="typeHomeCart">Home</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="typeOfficeCart" name="address_type" class="custom-control-input" value="Office" <?= ($customerProfile['address_type'] ?? '') === 'Office' ? 'checked' : '' ?>>
+                <label class="custom-control-label small" for="typeOfficeCart">Office</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="typeOtherCart" name="address_type" class="custom-control-input" value="Other" <?= ($customerProfile['address_type'] ?? '') === 'Other' ? 'checked' : '' ?>>
+                <label class="custom-control-label small" for="typeOtherCart">Other</label>
+              </div>
             </div>
 
             <div class="form-row">
               <div class="col-md-6 form-group">
-                <label class="font-weight-bold small">City <span class="text-danger">*</span></label>
-                <input type="text" name="city" class="form-control" value="<?= \App\Core\View::e($currentCity) ?>" required>
+                <label class="font-weight-bold small">House / Flat / Office No. <span class="text-danger">*</span></label>
+                <input type="text" name="house_no" class="form-control" value="<?= \App\Core\View::e($customerProfile['house_no'] ?? '') ?>" placeholder="e.g. Flat 604" required>
               </div>
               <div class="col-md-6 form-group">
-                <label class="font-weight-bold small">Pincode <span class="text-danger">*</span></label>
-                <input type="text" name="pincode" class="form-control" placeholder="6-digit pincode" pattern="[0-9]{6}" required>
+                <label class="font-weight-bold small">Street / Society / Area <span class="text-danger">*</span></label>
+                <input type="text" name="street" class="form-control" value="<?= \App\Core\View::e($customerProfile['street'] ?? '') ?>" placeholder="e.g. Palm Springs" required>
               </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col-md-4 form-group">
+                <label class="font-weight-bold small">City <span class="text-danger">*</span></label>
+                <input type="text" name="city" class="form-control" value="<?= \App\Core\View::e($customerProfile['city'] ?? $currentCity) ?>" required>
+              </div>
+              <div class="col-md-4 form-group">
+                <label class="font-weight-bold small">State <span class="text-danger">*</span></label>
+                <input type="text" name="state" class="form-control" value="<?= \App\Core\View::e($customerProfile['state'] ?? 'Haryana') ?>" required>
+              </div>
+              <div class="col-md-4 form-group">
+                <label class="font-weight-bold small">Pincode <span class="text-danger">*</span></label>
+                <input type="text" name="pincode" class="form-control" placeholder="6 digits" pattern="[0-9]{6}" value="<?= \App\Core\View::e($customerProfile['pincode'] ?? '') ?>" required>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="font-weight-bold small">Complete Address / Landmark (Optional)</label>
+              <textarea name="address" rows="2" class="form-control" placeholder="Any extra landmark details"><?= \App\Core\View::e($customerProfile['address'] ?? '') ?></textarea>
             </div>
 
             <div class="form-row">

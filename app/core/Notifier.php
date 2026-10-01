@@ -136,6 +136,8 @@ class Notifier
             'preferred_date'=> $booking['preferred_date'] ?? '',
             'preferred_time'=> $booking['preferred_time'] ?? '',
             'address'       => $booking['address'] ?? '',
+            'generated_password' => $booking['generated_password'] ?? null,
+            'identifier'    => $booking['identifier'] ?? null,
         ];
 
         if (!empty($booking['email'])) {
