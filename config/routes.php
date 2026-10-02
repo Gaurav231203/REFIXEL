@@ -19,6 +19,7 @@ Router::get('/gallery', 'PageController@gallery');
 
 Router::get('/contact', 'PageController@contact');
 Router::get('/contact-us.php', 'PageController@contact');
+Router::post('/contact', 'PageController@submitContact');
 
 Router::get('/terms', 'PageController@terms');
 Router::get('/terms-and-conditions.php', 'PageController@terms');

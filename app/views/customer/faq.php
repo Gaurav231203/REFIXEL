@@ -45,7 +45,7 @@
       <div class="text-center p-4 mt-5 rounded bg-light border">
         <h4 class="font-weight-bold" style="font-size: 20px;">Still have questions?</h4>
         <p class="text-muted mb-3">Our customer support specialists are ready to help you 7 days a week.</p>
-        <a href="https://api.whatsapp.com/send?phone=+919953358855&text=Hello%20Primodomus%2C%20I%20have%20a%20question." target="_blank" class="btn text-white px-4 py-2 font-weight-bold" style="background:#0f6e56; border-radius: 8px;">
+        <a href="https://api.whatsapp.com/send?phone=+919458182006&text=Hello%20Refixel%2C%20I%20have%20a%20question." target="_blank" class="btn text-white px-4 py-2 font-weight-bold" style="background:#0f6e56; border-radius: 8px;">
           <i class="fa fa-whatsapp mr-1"></i> Chat with Us on WhatsApp
         </a>
       </div>

@@ -130,12 +130,27 @@ $settings = $settings ?? [];
 
           <div class="form-group mb-3">
             <label class="font-weight-bold small text-dark">Facebook Page URL</label>
-            <input type="text" name="social_facebook" class="form-control" value="<?= View::e($settings['social_facebook'] ?? 'https://facebook.com/primodomus') ?>">
+            <input type="text" name="social_facebook" class="form-control" value="<?= View::e($settings['social_facebook'] ?? 'https://www.facebook.com/share/1GU16Dtfcr/') ?>">
           </div>
 
           <div class="form-group mb-3">
             <label class="font-weight-bold small text-dark">Instagram Profile URL</label>
-            <input type="text" name="social_instagram" class="form-control" value="<?= View::e($settings['social_instagram'] ?? 'https://instagram.com/primodomus') ?>">
+            <input type="text" name="social_instagram" class="form-control" value="<?= View::e($settings['social_instagram'] ?? 'https://www.instagram.com/letsrefixel?stkn=ajJtc20zcHRyM2Q3') ?>">
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="font-weight-bold small text-dark">LinkedIn Profile URL</label>
+            <input type="text" name="social_linkedin" class="form-control" value="<?= View::e($settings['social_linkedin'] ?? 'https://www.linkedin.com/in/lets-refixel-3aab5a43b?utm_source=share_via&utm_content=profile&utm_medium=member_android') ?>">
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="font-weight-bold small text-dark">X (Twitter) Profile URL</label>
+            <input type="text" name="social_twitter" class="form-control" value="<?= View::e($settings['social_twitter'] ?? 'https://x.com/letsrefixel') ?>">
+          </div>
+
+          <div class="form-group mb-3">
+            <label class="font-weight-bold small text-dark">YouTube Channel URL</label>
+            <input type="text" name="social_youtube" class="form-control" value="<?= View::e($settings['social_youtube'] ?? 'https://youtube.com/@letsrefixel?si=Xq0LZUFrv_yzlM5C') ?>">
           </div>
         </div>
       </div>

@@ -14,7 +14,7 @@
       </a>
     </li>
     <li>
-      <a href="https://api.whatsapp.com/send?phone=+919953358855&text=👋 Thank you for contacting Primodomus." target="_blank" rel="noopener">
+      <a href="https://api.whatsapp.com/send?phone=+919458182006&text=Hello%20Refixel%20Support" target="_blank" rel="noopener">
         <img src="<?= \App\Core\View::asset('img/whatsapp_icons_1.png') ?>" alt="WhatsApp" width="22" height="22" loading="lazy" decoding="async">
         <h6>WhatsApp</h6>
       </a>
@@ -37,7 +37,7 @@
 
 <!-- Floating WhatsApp Chat -->
 <div class="whatsapchat">
-  <a href="https://api.whatsapp.com/send?phone=+919953358855&text=👋 Thank you for contacting Primodomus." target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <a href="https://api.whatsapp.com/send?phone=+919458182006&text=Hello%20Refixel%20Support" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
     <i class="fa fa-whatsapp"></i>
   </a>
 </div>

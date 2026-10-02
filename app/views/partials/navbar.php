@@ -2,27 +2,27 @@
 $user = \App\Core\Auth::user();
 ?>
 <nav class="navbar navbar-expand-lg navbar-light main_menu">
-  <div class="container d-flex align-items-center justify-content-between">
+  <div class="container-fluid header-nav-container d-flex align-items-center justify-content-between">
     <a class="navbar-brand py-0" href="<?= \App\Core\View::url('/') ?>">
-      <img src="<?= \App\Core\View::asset('img/refixel-logo-horizontal.png') ?>" alt="REFIXEL" style="height: 42px; width: auto; object-fit: contain;">
+      <img src="<?= \App\Core\View::asset('img/refixel-logo-horizontal.png') ?>" alt="REFIXEL" style="height: 58px; width: auto; object-fit: contain;">
     </a>
 
     <!-- Desktop Navigation Links -->
     <div class="d-none d-lg-flex flex-grow-1 justify-content-center">
-      <ul class="d-flex mb-0 pl-0 list-unstyled align-items-center" style="gap: 24px; font-weight: 500; font-size: 15px;">
-        <li><a href="<?= \App\Core\View::url('/') ?>" class="text-dark text-decoration-none hover-text-success">Home</a></li>
-        <li><a href="<?= \App\Core\View::url('/about') ?>" class="text-dark text-decoration-none hover-text-success">About</a></li>
-        <li><a href="<?= \App\Core\View::url('/services') ?>" class="text-dark text-decoration-none hover-text-success">Services</a></li>
-        <li><a href="<?= \App\Core\View::url('/blogs') ?>" class="text-dark text-decoration-none hover-text-success">Blogs</a></li>
-        <li><a href="<?= \App\Core\View::url('/contact') ?>" class="text-dark text-decoration-none hover-text-success">Contact Us</a></li>
-        <li><a href="<?= \App\Core\View::url('/partner') ?>" class="text-decoration-none px-3 py-1 rounded" style="background: rgba(15, 110, 86, 0.1); color: #0f6e56; font-weight: 600;">Service Partner</a></li>
+      <ul class="d-flex mb-0 pl-0 list-unstyled align-items-center header-center-nav" style="gap: 30px; font-weight: 600; font-size: 16.5px;">
+        <li><a href="<?= \App\Core\View::url('/') ?>" class="header-nav-link text-decoration-none">Home</a></li>
+        <li><a href="<?= \App\Core\View::url('/about') ?>" class="header-nav-link text-decoration-none">About</a></li>
+        <li><a href="<?= \App\Core\View::url('/services') ?>" class="header-nav-link text-decoration-none">Services</a></li>
+        <li><a href="<?= \App\Core\View::url('/blogs') ?>" class="header-nav-link text-decoration-none">Blogs</a></li>
+        <li><a href="<?= \App\Core\View::url('/contact') ?>" class="header-nav-link text-decoration-none">Contact Us</a></li>
+        <li><a href="<?= \App\Core\View::url('/partner') ?>" class="header-nav-partner text-decoration-none px-3 py-2 rounded-pill">Service Partner</a></li>
       </ul>
     </div>
 
-    <div class="d-flex align-items-center ml-auto">
+    <div class="d-flex align-items-center header-action-btns ml-auto">
       <div class="d-none d-lg-flex align-items-center mr-3">
         <a class="hdr-cart" id="hdrCart" href="<?= \App\Core\View::url('/cart') ?>" aria-label="Cart">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
             <path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"></path>
           </svg>
@@ -61,7 +61,7 @@ $user = \App\Core\Auth::user();
           </li>
         <?php else: ?>
           <li>
-            <a href="javascript:void(0)" id="hdrLoginTrigger">
+            <a href="javascript:void(0)" id="hdrLoginTrigger" class="hdr-login-btn">
               <img src="<?= \App\Core\View::asset('img/account.webp') ?>" alt="Login">
               <strong>Login</strong>
             </a>

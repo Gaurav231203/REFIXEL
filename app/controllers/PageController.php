@@ -31,7 +31,27 @@ class PageController extends Controller
     public function contact(Request $request): Response
     {
         $cities = ServiceArea::getActiveCities();
-        return $this->render('customer.contact', ['title' => 'Contact Us | Primodomus', 'cities' => $cities], 'customer');
+        return $this->render('customer.contact', [
+            'title'       => 'Contact Us | REFIXEL HOME SERVICES',
+            'description' => 'Get in touch with REFIXEL Home Services for trusted home maintenance, repair, and cleaning. Call +91 94581 82006 or visit our office.',
+            'cities'      => $cities
+        ], 'customer');
+    }
+
+    public function submitContact(Request $request): Response
+    {
+        $name    = trim((string)$request->post('name', ''));
+        $email   = trim((string)$request->post('email', ''));
+        $message = trim((string)$request->post('message', ''));
+
+        if (empty($name) || empty($email) || empty($message)) {
+            $_SESSION['flash_error'] = 'Please fill out your name, email address, and message.';
+            return $this->redirect('/contact');
+        }
+
+        \App\Core\Logger::info("Contact inquiry received from {$name} ({$email}): {$message}");
+        $_SESSION['flash_success'] = "Thank you, {$name}! Your message has been received. Our team will get back to you shortly.";
+        return $this->redirect('/contact');
     }
 
     public function terms(Request $request): Response

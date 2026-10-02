@@ -179,7 +179,7 @@ $selectedServiceId = $service['id'] ?? 0;
         </div>
 
         <small class="text-muted text-center d-block">
-          Need immediate assistance? Call <a href="tel:+919953358855" class="text-dark font-weight-bold">+91 99533 58855</a>
+          Need immediate assistance? Call <a href="tel:+919458182006" class="text-dark font-weight-bold">+91 94581 82006</a>
         </small>
       </div>
     </div>

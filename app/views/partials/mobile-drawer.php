@@ -65,6 +65,16 @@ $user = \App\Core\Auth::user();
           <li><a href="<?= \App\Core\View::url('/login') ?>"><span class="menu_ico"><img src="<?= \App\Core\View::asset('img/account.png') ?>" alt="Sign In"></span> Sign In <i class="fa fa-angle-right"></i></a></li>
         </ul>
       <?php endif; ?>
+      <div class="drawer_social_links text-center py-3 border-top" style="margin-top: 15px;">
+        <p class="small text-muted mb-2 font-weight-bold">Follow REFIXEL</p>
+        <div class="d-flex justify-content-center align-items-center" style="gap: 12px;">
+          <a href="https://www.facebook.com/share/1GU16Dtfcr/" target="_blank" rel="noopener noreferrer" style="color: #64748b; font-size: 18px;" title="Facebook"><i class="fa fa-facebook-square"></i></a>
+          <a href="https://www.instagram.com/letsrefixel?stkn=ajJtc20zcHRyM2Q3" target="_blank" rel="noopener noreferrer" style="color: #64748b; font-size: 18px;" title="Instagram"><i class="fa fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/lets-refixel-3aab5a43b?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android" target="_blank" rel="noopener noreferrer" style="color: #64748b; font-size: 18px;" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+          <a href="https://x.com/letsrefixel" target="_blank" rel="noopener noreferrer" style="color: #64748b; font-size: 18px;" title="X (Twitter)"><i class="fa fa-twitter"></i></a>
+          <a href="https://youtube.com/@letsrefixel?si=Xq0LZUFrv_yzlM5C" target="_blank" rel="noopener noreferrer" style="color: #64748b; font-size: 18px;" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

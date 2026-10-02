@@ -19,10 +19,10 @@ $invoice = $invoice ?? [];
     <!-- Invoice Header -->
     <div class="row align-items-center mb-4 pb-3 border-bottom">
       <div class="col-sm-6">
-        <h3 class="font-weight-bold text-dark mb-1" style="color: #0f6e56 !important;">PRIMODOMUS</h3>
+        <h3 class="font-weight-bold text-dark mb-1" style="color: #f25b29 !important;">REFIXEL</h3>
         <p class="text-muted small mb-0">Professional Home Care & Maintenance Services</p>
         <p class="text-muted small mb-0">GSTIN: <strong>07AAAAA0000A1Z5</strong> &bull; HSN/SAC: 9987</p>
-        <p class="text-muted small mb-0">Support: care@primodomus.com &bull; +91 98765 43210</p>
+        <p class="text-muted small mb-0">Support: heyimaakashsaini@gmail.com &bull; +91 94581 82006</p>
       </div>
       <div class="col-sm-6 text-sm-right mt-3 mt-sm-0">
         <span class="badge badge-success px-3 py-1 font-weight-bold mb-2">TAX INVOICE</span>

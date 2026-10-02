@@ -1,17 +1,8 @@
 <!-- Load Custom Styles for New About Page UI -->
-<link rel="stylesheet" href="<?= \App\Core\View::asset('css/about-new.css') ?>" />
+<link rel="stylesheet" href="<?= \App\Core\View::asset('css/about-new.css') ?>?v=<?= filemtime(ROOT_PATH . '/public/assets/css/about-new.css') ?>" />
 
 <div class="about-page-wrapper">
-  <!-- 1. Breadcrumb -->
-  <div class="container">
-    <nav class="about-breadcrumb" aria-label="breadcrumb">
-      <a href="<?= \App\Core\View::url('/') ?>">Home</a>
-      <span class="divider">/</span>
-      <span class="active-item">About Us</span>
-    </nav>
-  </div>
-
-  <!-- 2. Hero Story Section -->
+  <!-- Hero Story Section -->
   <div class="hero-story-container mb-5">
     <section class="hero-story-section">
       <!-- Wide Background Team Visual (extends leftward behind text with soft gradient fade) -->
@@ -33,7 +24,7 @@
           <div class="col-lg-6 col-md-12 hero-text-col">
             <span class="section-eyebrow">— OUR STORY</span>
             <h1 class="hero-heading">
-              About <span class="brand-highlight">REFIXEL</span>
+              <span class="hero-about-prefix">About</span> <span class="brand-highlight">REFIXEL</span>
               <span class="sub-line-navy">Professional Home Services.</span>
               <span class="sub-line-orange">Simplified for Every Home.</span>
             </h1>
@@ -61,12 +52,12 @@
                 <span>Quality Service</span>
               </div>
               <div class="trust-pill-item">
-                <span class="pill-icon"><i class="fa fa-headphones"></i></span>
-                <span>On-Time Support</span>
-              </div>
-              <div class="trust-pill-item">
                 <span class="pill-icon"><i class="fa fa-tag"></i></span>
                 <span>Affordable Pricing</span>
+              </div>
+              <div class="trust-pill-item">
+                <span class="pill-icon"><i class="fa fa-headphones"></i></span>
+                <span>On-Time Support</span>
               </div>
             </div>
           </div>
@@ -80,13 +71,13 @@
     <div class="container">
       <div class="row align-items-center">
         <!-- Left: Storefront Photo -->
-        <div class="col-lg-6 col-md-12 mb-4 mb-lg-0">
-          <div class="journey-img-wrap shadow-sm" style="border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0;">
+        <div class="col-lg-5 col-md-12 mb-4 mb-lg-0">
+          <div class="journey-img-wrap shadow-sm" style="border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; max-width: 440px; margin: 0 auto;">
             <img 
               src="<?= \App\Core\View::asset('img/refixel-storefront.jpg') ?>" 
               alt="REFIXEL Home Services Storefront & Experience Center" 
               class="img-fluid w-100"
-              style="border-radius: 20px; display: block; object-fit: cover;"
+              style="border-radius: 20px; display: block; object-fit: cover; width: 100%; height: 320px;"
               loading="lazy"
               decoding="async"
             >
@@ -94,7 +85,7 @@
         </div>
 
         <!-- Right: Journey Story & Numbers -->
-        <div class="col-lg-6 col-md-12">
+        <div class="col-lg-7 col-md-12">
           <div class="journey-content-wrap">
             <span class="section-eyebrow">OUR JOURNEY</span>
             <h2 class="section-title-large mb-3">
@@ -156,21 +147,21 @@
 
           <!-- Founder Social Links -->
           <div class="founder-social-links">
-            <span class="founder-social-label">Follow Aakash:</span>
+            <span class="founder-social-label">Follow REFIXEL:</span>
             <div class="founder-social-icons">
-              <a href="https://www.linkedin.com/in/lets-refixel-3aab5a43b?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="founder-social-btn btn-linkedin" title="Connect with Aakash Kumar on LinkedIn" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/lets-refixel-3aab5a43b?utm_source=share_via&amp;utm_content=profile&amp;utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="founder-social-btn btn-linkedin" title="Follow REFIXEL on LinkedIn" aria-label="LinkedIn">
                 <i class="fa fa-linkedin"></i>
               </a>
-              <a href="https://www.instagram.com/letsrefixel?stkn=ajJtc20zcHRyM2Q3" target="_blank" rel="noopener noreferrer" class="founder-social-btn btn-instagram" title="Follow Aakash Kumar on Instagram" aria-label="Instagram">
+              <a href="https://www.instagram.com/letsrefixel?stkn=ajJtc20zcHRyM2Q3" target="_blank" rel="noopener noreferrer" class="founder-social-btn btn-instagram" title="Follow REFIXEL on Instagram" aria-label="Instagram">
                 <i class="fa fa-instagram"></i>
               </a>
-              <a href="https://x.com/letsrefixel" target="_blank" rel="noopener noreferrer" class="founder-social-btn btn-x" title="Follow Aakash Kumar on X" aria-label="X">
+              <a href="https://x.com/letsrefixel" target="_blank" rel="noopener noreferrer" class="founder-social-btn btn-x" title="Follow REFIXEL on X" aria-label="X">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:inline-block; vertical-align:-2px;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
               </a>
-              <a href="https://www.facebook.com/share/1GU16Dtfcr/" target="_blank" rel="noopener noreferrer" class="founder-social-btn btn-facebook" title="Follow Aakash Kumar on Facebook" aria-label="Facebook">
+              <a href="https://www.facebook.com/share/1GU16Dtfcr/" target="_blank" rel="noopener noreferrer" class="founder-social-btn btn-facebook" title="Follow REFIXEL on Facebook" aria-label="Facebook">
                 <i class="fa fa-facebook"></i>
               </a>
-              <a href="https://youtube.com/@letsrefixel?si=Xq0LZUFrv_yzlM5C" target="_blank" rel="noopener noreferrer" class="founder-social-btn btn-youtube" title="Subscribe to Aakash Kumar on YouTube" aria-label="YouTube">
+              <a href="https://youtube.com/@letsrefixel?si=Xq0LZUFrv_yzlM5C" target="_blank" rel="noopener noreferrer" class="founder-social-btn btn-youtube" title="Subscribe to REFIXEL on YouTube" aria-label="YouTube">
                 <i class="fa fa-youtube-play"></i>
               </a>
             </div>
@@ -239,7 +230,7 @@
   </section>
 
   <!-- 6. Why Choose Us Section (Dark Navy) -->
-  <section class="why-choose-section">
+  <section class="why-choose-section" id="whyChoose">
     <div class="container">
       <span class="section-eyebrow" style="color: #ff7847;">WHY CHOOSE REFIXEL</span>
       <h2 class="section-title-large text-white">Why Choose Us?</h2>
@@ -318,7 +309,8 @@
   </section>
 
   <!-- 8. Our Clients / Testimonials Section -->
-  <section class="testimonials-section">
+  <!-- 8. Our Clients / Testimonials Section -->
+  <section class="testimonials-section" id="clientsSection" style="scroll-margin-top: 100px;">
     <div class="container">
       <div class="testimonial-header-row">
         <div>
@@ -326,124 +318,133 @@
           <h2 class="section-title-large mb-0">
             Trusted by Thousands of People & Companies
             <span class="badge badge-light border ml-2" style="font-size: 15px; font-weight: 700; color: #f25b29; vertical-align: middle;">
-              <i class="fa fa-star text-warning"></i> <?= \App\Core\View::e(\App\Models\Setting::get('stat_rating', '4.8★')) ?>
+              <i class="fa fa-star text-warning"></i> <?= \App\Core\View::e(\App\Models\Setting::get('stat_rating', '4.9★')) ?>
             </span>
           </h2>
         </div>
-        <div>
+        <div class="d-flex align-items-center" style="gap: 14px;">
+          <!-- 2 Clickable Left / Right Navigation Buttons -->
+          <div class="d-flex align-items-center" style="gap: 8px;">
+            <button type="button" class="review-nav-arrow" id="reviewPrevBtn" aria-label="Previous Reviews" title="Previous Reviews">
+              <i class="fa fa-chevron-left"></i>
+            </button>
+            <button type="button" class="review-nav-arrow" id="reviewNextBtn" aria-label="Next Reviews" title="Next Reviews">
+              <i class="fa fa-chevron-right"></i>
+            </button>
+          </div>
           <a href="<?= \App\Core\View::url('/services') ?>" class="btn-refixel-pill-outline">
             View All Reviews <i class="fa fa-arrow-right ml-1"></i>
           </a>
         </div>
       </div>
 
-      <div class="testimonials-grid">
-        <!-- Review 1: Mukul Singh -->
-        <div class="testimonial-card">
-          <div>
-            <div class="client-meta">
-              <div class="client-info">
-                <div class="client-avatar-circle">M</div>
-                <div>
-                  <div class="client-name">mukul singh</div>
-                  <div class="client-time">2 months ago</div>
-                </div>
-              </div>
-              <svg class="google-badge-icon" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-              </svg>
-            </div>
-            <div class="rating-stars-row">
-              <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-            </div>
-            <p class="testimonial-quote">
-              Very good service price is also so reasonable.
-            </p>
-          </div>
-        </div>
+      <?php
+      $googleReviews = [
+          [
+              'name' => 'mukul singh',
+              'time' => '2 months ago',
+              'avatar' => 'M',
+              'avatar_class' => '',
+              'quote' => 'Very good service price is also so reasonable.'
+          ],
+          [
+              'name' => 'Rohit Rai',
+              'time' => '3 months ago',
+              'avatar' => 'R',
+              'avatar_class' => 'avatar-blue',
+              'quote' => 'Very good service and positive behaviour. Clean water tank and tap.'
+          ],
+          [
+              'name' => 'shipra bhard',
+              'time' => '3 months ago',
+              'avatar' => 'S',
+              'avatar_class' => 'avatar-pink',
+              'quote' => 'Amazing work! My water tank was very dirty, but now it is perfectly clean and the water is crystal clear.'
+          ],
+          [
+              'name' => 'Ld Popnal',
+              'time' => '3 months ago',
+              'avatar' => 'L',
+              'avatar_class' => 'avatar-slate',
+              'quote' => 'Very very Excellent service.'
+          ],
+          [
+              'name' => 'Pooja Sharma',
+              'time' => '1 month ago',
+              'avatar' => 'P',
+              'avatar_class' => 'avatar-purple',
+              'quote' => 'Booked deep home cleaning for our 3BHK. The staff arrived strictly on time with commercial grade vacuums and left our home spotless. Outstanding experience!'
+          ],
+          [
+              'name' => 'Amit Verma',
+              'time' => '2 weeks ago',
+              'avatar' => 'A',
+              'avatar_class' => 'avatar-orange',
+              'quote' => 'Emergency AC repair in Gurgaon handled within 45 mins. Gas refilling and coil cleaning done transparently with warranty receipt. Highly recommended!'
+          ],
+          [
+              'name' => 'Deepak Rawat',
+              'time' => '1 month ago',
+              'avatar' => 'D',
+              'avatar_class' => 'avatar-green',
+              'quote' => 'Quick and hassle-free plumbing repair in Kashipur. Fixed the kitchen drainage and tap leakage with genuine spare parts. Very courteous technician.'
+          ],
+          [
+              'name' => 'Neha Gupta',
+              'time' => '3 weeks ago',
+              'avatar' => 'N',
+              'avatar_class' => 'avatar-teal',
+              'quote' => 'Got living room painting and modular switch fitting done. Super clean execution, zero mess left on floors. REFIXEL is our go-to home service now.'
+          ],
+          [
+              'name' => 'Vikas Choudhary',
+              'time' => '2 months ago',
+              'avatar' => 'V',
+              'avatar_class' => 'avatar-indigo',
+              'quote' => 'Carpenter was extremely skilled and polite. Repaired our master bedroom wardrobe hydraulic hinges and aligned doors smoothly in one visit.'
+          ],
+          [
+              'name' => 'Saurabh Joshi',
+              'time' => '3 weeks ago',
+              'avatar' => 'S',
+              'avatar_class' => 'avatar-cyan',
+              'quote' => 'Sofa and mattress dry cleaning was top notch. Removed stubborn tea stains that others could not clean. Affordable rates and genuine professionals.'
+          ]
+      ];
+      ?>
 
-        <!-- Review 2: Rohit Rai -->
-        <div class="testimonial-card">
-          <div>
-            <div class="client-meta">
-              <div class="client-info">
-                <div class="client-avatar-circle avatar-blue">R</div>
+      <!-- Infinite Reviews Carousel Viewport -->
+      <div class="testimonials-carousel-viewport" id="reviewsViewport">
+        <div class="testimonials-carousel-track" id="reviewsTrack">
+          <?php for ($set = 0; $set < 2; $set++): ?>
+            <?php foreach ($googleReviews as $r): ?>
+              <div class="testimonial-card">
                 <div>
-                  <div class="client-name">Rohit Rai</div>
-                  <div class="client-time">3 months ago</div>
+                  <div class="client-meta">
+                    <div class="client-info">
+                      <div class="client-avatar-circle <?= $r['avatar_class'] ?>"><?= $r['avatar'] ?></div>
+                      <div>
+                        <div class="client-name"><?= \App\Core\View::e($r['name']) ?></div>
+                        <div class="client-time"><?= \App\Core\View::e($r['time']) ?></div>
+                      </div>
+                    </div>
+                    <svg class="google-badge-icon" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                  </div>
+                  <div class="rating-stars-row">
+                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                  </div>
+                  <p class="testimonial-quote">
+                    <?= \App\Core\View::e($r['quote']) ?>
+                  </p>
                 </div>
               </div>
-              <svg class="google-badge-icon" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-              </svg>
-            </div>
-            <div class="rating-stars-row">
-              <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-            </div>
-            <p class="testimonial-quote">
-              Very good service and positive behaviour. Clean water tank and tap.
-            </p>
-          </div>
-        </div>
-
-        <!-- Review 3: Shipra Bhard -->
-        <div class="testimonial-card">
-          <div>
-            <div class="client-meta">
-              <div class="client-info">
-                <div class="client-avatar-circle avatar-pink">S</div>
-                <div>
-                  <div class="client-name">shipra bhard</div>
-                  <div class="client-time">3 months ago</div>
-                </div>
-              </div>
-              <svg class="google-badge-icon" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-              </svg>
-            </div>
-            <div class="rating-stars-row">
-              <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-            </div>
-            <p class="testimonial-quote">
-              Amazing work! My water tank was very dirty, but now it is perfectly clean and the water is crystal clear.
-            </p>
-          </div>
-        </div>
-
-        <!-- Review 4: Ld Popnal -->
-        <div class="testimonial-card">
-          <div>
-            <div class="client-meta">
-              <div class="client-info">
-                <div class="client-avatar-circle avatar-slate">L</div>
-                <div>
-                  <div class="client-name">Ld Popnal</div>
-                  <div class="client-time">3 months ago</div>
-                </div>
-              </div>
-              <svg class="google-badge-icon" viewBox="0 0 24 24">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-              </svg>
-            </div>
-            <div class="rating-stars-row">
-              <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-            </div>
-            <p class="testimonial-quote">
-              Very very Excellent service.
-            </p>
-          </div>
+            <?php endforeach; ?>
+          <?php endfor; ?>
         </div>
       </div>
     </div>
@@ -1050,11 +1051,92 @@
         });
       });
     }
+
+    // Reviews Infinite Carousel & Navigation Controls
+    (function() {
+      var viewport = document.getElementById('reviewsViewport');
+      var track = document.getElementById('reviewsTrack');
+      var prevBtn = document.getElementById('reviewPrevBtn');
+      var nextBtn = document.getElementById('reviewNextBtn');
+      if (!viewport || !track) return;
+
+      var isPaused = false;
+      var speed = 0.8; // px per frame
+      var animId = null;
+
+      function getHalfWidth() {
+        return track.scrollWidth / 2;
+      }
+
+      // Initialize scroll position in the center so it can wrap left and right immediately
+      setTimeout(function() {
+        var half = getHalfWidth();
+        if (half > 0) {
+          viewport.scrollLeft = half;
+        }
+        startLoop();
+      }, 150);
+
+      function startLoop() {
+        function tick() {
+          if (!isPaused) {
+            // Smooth left to right auto-scroll (cards travel towards right)
+            viewport.scrollLeft -= speed;
+            var half = getHalfWidth();
+            if (half > 0 && viewport.scrollLeft <= 0) {
+              viewport.scrollLeft += half;
+            }
+          }
+          animId = requestAnimationFrame(tick);
+        }
+        animId = requestAnimationFrame(tick);
+      }
+
+      // Infinite wrapping guard on manual scrolling or touch drag
+      viewport.addEventListener('scroll', function() {
+        var half = getHalfWidth();
+        if (half > 0) {
+          if (viewport.scrollLeft <= 0) {
+            viewport.scrollLeft += half;
+          } else if (viewport.scrollLeft >= half * 1.96) {
+            viewport.scrollLeft -= half;
+          }
+        }
+      }, { passive: true });
+
+      // Pause on mouse hover and touch
+      viewport.addEventListener('mouseenter', function() { isPaused = true; });
+      viewport.addEventListener('mouseleave', function() { isPaused = false; });
+      viewport.addEventListener('touchstart', function() { isPaused = true; }, { passive: true });
+      viewport.addEventListener('touchend', function() {
+        setTimeout(function() { isPaused = false; }, 1500);
+      });
+
+      // Left Arrow Click (Scrolls Left)
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          isPaused = true;
+          viewport.scrollBy({ left: -332, behavior: 'smooth' });
+          setTimeout(function() { isPaused = false; }, 2500);
+        });
+      }
+
+      // Right Arrow Click (Scrolls Right)
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          isPaused = true;
+          viewport.scrollBy({ left: 332, behavior: 'smooth' });
+          setTimeout(function() { isPaused = false; }, 2500);
+        });
+      }
+    })();
   });
   </script>
 
   <!-- 10. CTA & Newsletter Banner -->
-  <section class="cta-newsletter-section">
+  <section class="cta-newsletter-section" id="newsletterCta">
     <div class="container">
       <div class="cta-banner-container">
         <div class="row align-items-center">
